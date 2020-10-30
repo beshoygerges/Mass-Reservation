@@ -28,7 +28,7 @@ public class MassReservationApplication implements CommandLineRunner {
         if (massRepository.findAll().isEmpty()) {
             List<Mass> masses = new ArrayList<>();
             LocalDate date = LocalDate.now();
-            for (int i = 0; i < 365; i++) {
+            for (int i = 0; i < 200; i++) {
                 if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY) || date.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
                     Mass mass = new Mass();
                     mass.setDate(date);
