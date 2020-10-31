@@ -52,7 +52,7 @@ public class ExceptionHandlerAop extends ResponseEntityExceptionHandler {
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(RuntimeException.class)
     public Response handleException(RuntimeException e) {
-        log.error("error while processing request", e);
+        log.error(e.getMessage());
         return new Response(400, e.getMessage());
     }
 

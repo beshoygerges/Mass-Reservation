@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("Admin")
-                .password("ADMIN@admin_2020")
+                .password(getPasswordEncoder().encode("ADMIN@admin_2020"))
                 .authorities("Admin");
     }
 
@@ -36,17 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
                 .permitAll()
-                .loginProcessingUrl("/perform-login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/adminPage", true)
-                .failureUrl("/login-error")
+                .defaultSuccessUrl("/admin", true)
                 .and()
                 .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .permitAll()
                 .and()

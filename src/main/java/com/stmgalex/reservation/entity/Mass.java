@@ -48,7 +48,7 @@ public class Mass implements Serializable {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "mass", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mass")
     private List<Reservation> reservations = new ArrayList<>();
 
     @Transient

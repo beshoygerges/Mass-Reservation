@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -33,13 +32,13 @@ public class ReservationServiceImpl implements ReservationService {
     private int nextMassAfter;
 
     @Override
-    public ReservationResponse reserve(final ReservationRequest request) {
+    public synchronized ReservationResponse reserve(final ReservationRequest request) {
 
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
         User user = optionalUser.orElse(createUser(request));
 
-        Mass mass = user.getLastMass();
+        Mass mass = user.getLastActiveMass();
 
         if (Objects.nonNull(mass) && !isExceedMassIntervals(mass)) {
             throw new MassIntervalNotExceededException("    عفوا يمكنك الحجز مجددا من يوم " + mass.getDate().plusDays(nextMassAfter) + " ");
@@ -59,13 +58,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         mass.deductSeat();
 
-        Reservation reservation = new Reservation();
-
-        user.addReservation(reservation);
-
-        mass.addReservation(reservation);
-
         userRepository.save(user);
+
+        Reservation reservation = new Reservation(user, mass);
+
+        reservation = reservationRepository.save(reservation);
 
         return new ReservationResponse(reservation);
     }

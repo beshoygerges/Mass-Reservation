@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -48,20 +49,18 @@ public class User implements Serializable {
 
 
     @Transient
-    public Mass getLastMass() {
-        List<Reservation> activeReservations = this.reservations.stream()
-                .filter(Reservation::isActive)
-                .collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(activeReservations))
-            return reservations.get(0).getMass();
+    public Mass getLastActiveMass() {
+        Reservation reservation = getLastReservation();
+        if (Objects.nonNull(reservation))
+            return reservation.getMass();
         return null;
     }
 
     public Reservation getLastReservation() {
-        if (!reservations.isEmpty() && reservations.get(0).isActive()) {
-            return reservations.get(0);
-        }
-        return null;
+        return reservations.stream()
+                .filter(Reservation::isActive)
+                .findFirst()
+                .orElse(null);
     }
 
     public void addReservation(Reservation reservation) {
