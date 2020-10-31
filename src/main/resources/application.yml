@@ -29,3 +29,9 @@ mass:
   interval:
     days: 10
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+

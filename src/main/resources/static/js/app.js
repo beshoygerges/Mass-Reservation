@@ -2,11 +2,9 @@ currentDate = new Date();
 currentDate.setDate(currentDate.getDate() + 1);
 datePickerId.min = currentDate.toISOString().split("T")[0];
 datePickerId.value = currentDate.toISOString().split("T")[0];
+populateMassTimes(currentDate.getDay());
 
-$('#datePickerId').change(function () {
-    var date = $(this).val();
-    date = new Date(date);
-    day = date.getDay()
+function populateMassTimes(day) {
     $('#times').empty()
     if (day == 0 || day == 5) {
         $('#times').prop('disabled', false);
@@ -19,6 +17,13 @@ $('#datePickerId').change(function () {
         $('#times').prop('disabled', true);
         $('#times').append(`<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
     }
+}
+
+$('#datePickerId').change(function () {
+    var date = $(this).val();
+    date = new Date(date);
+    var day = date.getDay()
+    populateMassTimes(day);
 
 });
 
@@ -166,8 +171,7 @@ $('#myModal').on('hidden.bs.modal', function () {
     $("#response").text('');
     $('#reservationForm').trigger("reset");
     datePickerId.value = currentDate.toISOString().split("T")[0];
-    $('#times').prop('disabled', true);
-    $('#times').append(`<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
+    populateMassTimes(currentDate.getDay())
 });
 
 $('#myModal2').on('hidden.bs.modal', function () {
