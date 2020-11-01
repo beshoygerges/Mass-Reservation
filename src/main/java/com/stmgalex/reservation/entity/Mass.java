@@ -56,7 +56,7 @@ public class Mass implements Serializable {
         return totalSeats - reservedSeats > 0;
     }
 
-    public void deductSeat() {
+    public void reserveSeat() {
         reservedSeats++;
     }
 

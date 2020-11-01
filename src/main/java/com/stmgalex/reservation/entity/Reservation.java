@@ -25,6 +25,9 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "massId")
     private Mass mass;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int seatNumber;
+
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean active = true;
 

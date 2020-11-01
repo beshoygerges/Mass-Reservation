@@ -56,11 +56,13 @@ public class ReservationServiceImpl implements ReservationService {
             throw new MassHaveNoSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
         }
 
-        mass.deductSeat();
+        mass.reserveSeat();
 
         userRepository.save(user);
 
         Reservation reservation = new Reservation(user, mass);
+
+        reservation.setSeatNumber(mass.getReservedSeats());
 
         reservation = reservationRepository.save(reservation);
 

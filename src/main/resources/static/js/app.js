@@ -74,6 +74,7 @@ function createReservation() {
             $('#reservationDetails').html(
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
+                '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
                 '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
                 '<strong>حالة الحجز  :   تم التاكيد</strong>'
@@ -113,6 +114,7 @@ function cancelReservation() {
             $('#reservationDetails').html(
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
+                '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
                 '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
                 '<strong>حالة الحجز  :   تم الإلغاء</strong>'
@@ -151,6 +153,7 @@ function searchReservation() {
             $('#reservationDetails').html(
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
+                '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
                 '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
                 '<strong>حالة الحجز  :   تم التأكيد</strong>'

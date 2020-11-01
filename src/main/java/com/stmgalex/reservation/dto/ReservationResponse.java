@@ -16,6 +16,8 @@ public class ReservationResponse implements Serializable {
 
     private String name;
 
+    private int seatNumber;
+
     private LocalDate massDate;
 
     private LocalTime massTime;
@@ -27,5 +29,6 @@ public class ReservationResponse implements Serializable {
         setMassTime(mass.getTime());
         setName(user.getName());
         setReservationId(reservation.getId());
+        setSeatNumber(reservation.getSeatNumber());
     }
 }
