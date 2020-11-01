@@ -64,4 +64,8 @@ public class Mass implements Serializable {
         reservations.add(reservation);
         reservation.setMass(this);
     }
+
+    public void releaseSeat() {
+        reservedSeats--;
+    }
 }

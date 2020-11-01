@@ -60,7 +60,7 @@ function createReservation() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/rest/v1/reservation",
+        url: "/reservations",
         data: JSON.stringify(request),
         dataType: 'json',
         cache: false,
@@ -92,6 +92,7 @@ function createReservation() {
 }
 
 function cancelReservation() {
+
     $("#cancelResponse").text('');
 
     var nationalId = $("#cancelNationalId").val();
@@ -102,7 +103,7 @@ function cancelReservation() {
 
     $.ajax({
         type: "DELETE",
-        url: "/rest/v1/reservation?nationalId=" + nationalId,
+        url: "/reservations?nationalId=" + nationalId,
         dataType: 'json',
         cache: false,
         timeout: 600000,
@@ -142,7 +143,7 @@ function searchReservation() {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "/rest/v1/reservation?nationalId=" + nationalId,
+        url: "/reservations?nationalId=" + nationalId,
         dataType: 'json',
         cache: false,
         timeout: 600000,

@@ -79,6 +79,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
         reservation.setActive(false);
+        reservation.getMass().releaseSeat();
         return new ReservationResponse(reservation);
     }
 

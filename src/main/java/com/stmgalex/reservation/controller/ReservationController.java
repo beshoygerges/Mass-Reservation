@@ -14,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @Validated
 @AllArgsConstructor
 @Controller
-@RequestMapping("/rest/v1/reservation")
+@RequestMapping("/reservations")
 public class ReservationController {
 
     private final ReservationService reservationService;

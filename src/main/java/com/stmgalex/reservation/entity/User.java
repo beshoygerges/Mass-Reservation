@@ -5,15 +5,14 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -50,23 +49,28 @@ public class User implements Serializable {
 
     @Transient
     public Mass getLastActiveMass() {
-        Reservation reservation = getLastReservation();
+        Reservation reservation = getLastActiveReservation();
         if (Objects.nonNull(reservation))
             return reservation.getMass();
         return null;
     }
 
-    public Reservation getLastReservation() {
+    @Transient
+    public Reservation getLastActiveReservation() {
         return reservations.stream()
                 .filter(Reservation::isActive)
                 .findFirst()
                 .orElse(null);
     }
 
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-        reservation.setUser(this);
+    @Transient
+    public Reservation getLastReservation() {
+        return reservations.stream()
+                .filter(r -> r.isActive() && r.getMass().getDate().isAfter(LocalDate.now()))
+                .findFirst()
+                .orElse(null);
     }
+
 }
 
 

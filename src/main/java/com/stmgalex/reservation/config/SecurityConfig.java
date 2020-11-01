@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/rest/v1/reservation/**", "/", "/error")
+                .antMatchers("/reservations/**", "/", "/error")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
