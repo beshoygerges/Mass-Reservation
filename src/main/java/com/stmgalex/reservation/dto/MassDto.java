@@ -26,6 +26,6 @@ public class MassDto implements Serializable {
     }
 
     public double getAttendancePercentage() {
-        return reservedSeats / totalSeats * 100d;
+        return reservedSeats * 1.0 / totalSeats * 100d;
     }
 }
