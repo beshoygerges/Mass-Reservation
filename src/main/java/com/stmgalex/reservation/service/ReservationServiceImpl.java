@@ -1,5 +1,6 @@
 package com.stmgalex.reservation.service;
 
+import com.stmgalex.reservation.dto.AvailableSeatsRequest;
 import com.stmgalex.reservation.dto.ReservationRequest;
 import com.stmgalex.reservation.dto.ReservationResponse;
 import com.stmgalex.reservation.entity.Mass;
@@ -92,6 +93,23 @@ public class ReservationServiceImpl implements ReservationService {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
         return new ReservationResponse(reservation);
+    }
+
+    @Override
+    public Mass getAvailableSeats(AvailableSeatsRequest request) {
+
+        Optional<Mass> optionalMass = massRepository.findByDateAndTime(request.getMassDate(), request.getMassTime());
+
+        Mass mass = optionalMass.orElseThrow(() -> new MassNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
+
+        if (!mass.isEnabled()) {
+            throw new MassNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
+        }
+
+        if (!mass.haveSeats()) {
+            throw new MassHaveNoSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
+        }
+        return mass;
     }
 
     private boolean isExceedMassIntervals(Mass mass) {

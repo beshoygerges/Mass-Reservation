@@ -1,5 +1,6 @@
 package com.stmgalex.reservation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -67,5 +68,20 @@ public class Mass implements Serializable {
 
     public void releaseSeat() {
         reservedSeats--;
+    }
+
+    @Transient
+    public String getStatus() {
+        return enabled ? "نشط" : "غير نشط";
+    }
+
+    @Transient
+    public double getAttendancePercentage() {
+        return reservedSeats * 1.0 / totalSeats * 100d;
+    }
+
+    @Transient
+    public int getAvailableSeats() {
+        return totalSeats - reservedSeats;
     }
 }

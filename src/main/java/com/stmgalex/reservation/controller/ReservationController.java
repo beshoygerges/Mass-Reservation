@@ -1,7 +1,11 @@
 package com.stmgalex.reservation.controller;
 
+import com.stmgalex.reservation.dto.AvailableSeatsRequest;
+import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.ReservationRequest;
+import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.service.ReservationService;
+import com.stmgalex.reservation.util.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,5 +36,11 @@ public class ReservationController {
     @DeleteMapping
     public ResponseEntity deleteReservation(@RequestParam @NotEmpty String nationalId) {
         return ResponseEntity.ok(reservationService.cancelReservation(nationalId));
+    }
+
+    @PostMapping("/seats")
+    public ResponseEntity getMassAvailableSeats(@Valid @RequestBody AvailableSeatsRequest request) {
+        Mass mass = reservationService.getAvailableSeats(request);
+        return ResponseEntity.ok(MapperUtil.map(mass, MassDto.class));
     }
 }

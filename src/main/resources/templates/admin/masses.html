@@ -57,7 +57,7 @@
                                     <td th:text="${mass.totalSeats - mass.reservedSeats}"></td>
                                     <td th:text="${mass.reservedSeats}"></td>
                                     <td th:text="${mass.getAttendancePercentage()} + '%'"></td>
-                                    <td th:text="${mass.status()}"></td>
+                                    <td th:text="${mass.getStatus()}"></td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -17,15 +17,14 @@ public class MassDto implements Serializable {
 
     private int totalSeats;
 
+    private int availableSeats;
+
     private int reservedSeats;
 
     private boolean enabled;
 
-    public String status() {
-        return enabled ? "نشط" : "غير نشط";
-    }
+    private String status;
 
-    public double getAttendancePercentage() {
-        return reservedSeats * 1.0 / totalSeats * 100d;
-    }
+    private double attendancePercentage;
+
 }

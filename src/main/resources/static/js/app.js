@@ -1,8 +1,11 @@
 currentDate = new Date();
 currentDate.setDate(currentDate.getDate() + 1);
 datePickerId.min = currentDate.toISOString().split("T")[0];
+datePickerId2.min = currentDate.toISOString().split("T")[0];
 datePickerId.value = currentDate.toISOString().split("T")[0];
+datePickerId2.value = currentDate.toISOString().split("T")[0];
 populateMassTimes(currentDate.getDay());
+populateMassTimes2(currentDate.getDay());
 
 function populateMassTimes(day) {
     $('#times').empty()
@@ -19,13 +22,38 @@ function populateMassTimes(day) {
     }
 }
 
+function populateMassTimes2(day) {
+
+    $('#times2').empty()
+    if (day == 0 || day == 5) {
+        $('#times2').prop('disabled', false);
+        $('#times2').append(`<option value="06:00:00">06:00</option>`);
+        $('#times2').append(`<option value="08:00:00">08:00</option>`);
+    } else if (day == 3) {
+        $('#times2').append(`<option value="08:00:00">08:00</option>`);
+        $('#times2').prop('disabled', false);
+    } else {
+        $('#times2').prop('disabled', true);
+        $('#times2').append(`<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
+
+    }
+}
+
 $('#datePickerId').change(function () {
     var date = $(this).val();
     date = new Date(date);
     var day = date.getDay()
     populateMassTimes(day);
-
 });
+
+
+$('#datePickerId2').change(function () {
+    var date = $(this).val();
+    date = new Date(date);
+    var day = date.getDay()
+    populateMassTimes2(day);
+});
+
 
 $(document).ready(function () {
     $("#reservationForm").submit(function (event) {
@@ -41,6 +69,11 @@ $(document).ready(function () {
     $("#searchReservationForm").submit(function (event) {
         event.preventDefault();
         searchReservation();
+    });
+
+    $("#seatsForm").submit(function (event) {
+        event.preventDefault();
+        getAvailableSeats();
     });
 });
 
@@ -170,6 +203,39 @@ function searchReservation() {
 
 }
 
+function getAvailableSeats() {
+
+    $("#seatsResponse").text('');
+    var request = {}
+
+    request["massTime"] = $("#times2").val();
+
+    request["massDate"] = $("#datePickerId2").val();
+
+    $("#seatsBtn").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/reservations/seats",
+        data: JSON.stringify(request),
+        dataType: 'json',
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            var details = JSON.parse(JSON.stringify(data));
+            console.log(details)
+            $("#seatsResponse").text(' عدد المقاعد المتاحة ' + details.availableSeats);
+            $("#seatsBtn").prop("disabled", false);
+        },
+        error: function (e) {
+            var res = JSON.parse(e.responseText)
+            $("#seatsResponse").text(res.message);
+            $("#seatsBtn").prop("disabled", false);
+        }
+    });
+}
+
 $('#myModal').on('hidden.bs.modal', function () {
     $("#reserveBtn").prop("disabled", false);
     $("#response").text('');
@@ -188,4 +254,10 @@ $('#myModal3').on('hidden.bs.modal', function () {
     $("#searchReserveBtn").prop("disabled", false);
     $("#searchResponse").text('');
     $('#searchReservationForm').trigger("reset");
+});
+
+$('#myModal4').on('hidden.bs.modal', function () {
+    $("#seatsBtn").prop("disabled", false);
+    $("#seatsResponse").text('');
+    $('#seatsForm').trigger("reset");
 });
