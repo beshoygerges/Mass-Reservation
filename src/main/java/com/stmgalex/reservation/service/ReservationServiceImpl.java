@@ -1,8 +1,6 @@
 package com.stmgalex.reservation.service;
 
-import com.stmgalex.reservation.dto.AvailableSeatsRequest;
-import com.stmgalex.reservation.dto.ReservationRequest;
-import com.stmgalex.reservation.dto.ReservationResponse;
+import com.stmgalex.reservation.dto.*;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.Reservation;
 import com.stmgalex.reservation.entity.User;
@@ -41,7 +39,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         Mass mass = user.getLastActiveMass();
 
-        if (Objects.nonNull(mass) && !isExceedMassIntervals(mass)) {
+        if (Objects.nonNull(mass) && !isExceedMassIntervals(mass, request.getMassDate())) {
             throw new MassIntervalNotExceededException("    عفوا يمكنك الحجز مجددا من يوم " + mass.getDate().plusDays(nextMassAfter) + " ");
         }
 
@@ -72,10 +70,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public ReservationResponse cancelReservation(String nationalId) {
-        Optional<User> optionalUser = userRepository.findByNationalId(nationalId);
+    public ReservationResponse cancelReservation(final CancelReservationRequest request) {
+        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
-        Reservation reservation = user.getLastReservation();
+        Reservation reservation = user.getReservation(request.getMassDate(), request.getMassTime());
         if (Objects.isNull(reservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
@@ -85,10 +83,10 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationResponse searchReservation(String nationalId) {
-        Optional<User> optionalUser = userRepository.findByNationalId(nationalId);
+    public ReservationResponse searchReservation(final SearchReservationRequest request) {
+        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
-        Reservation reservation = user.getLastReservation();
+        Reservation reservation = user.getReservation(request.getMassDate(),request.getMassTime());
         if (Objects.isNull(reservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
@@ -112,8 +110,8 @@ public class ReservationServiceImpl implements ReservationService {
         return mass;
     }
 
-    private boolean isExceedMassIntervals(Mass mass) {
-        return DAYS.between(mass.getDate(), LocalDate.now()) >= nextMassAfter;
+    private boolean isExceedMassIntervals(Mass mass, LocalDate massDate) {
+        return DAYS.between(mass.getDate(), massDate) >= nextMassAfter;
     }
 
     private User createUser(ReservationRequest request) {

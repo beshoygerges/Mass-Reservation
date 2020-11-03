@@ -1,8 +1,6 @@
 package com.stmgalex.reservation.controller;
 
-import com.stmgalex.reservation.dto.AvailableSeatsRequest;
-import com.stmgalex.reservation.dto.MassDto;
-import com.stmgalex.reservation.dto.ReservationRequest;
+import com.stmgalex.reservation.dto.*;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.service.ReservationService;
 import com.stmgalex.reservation.util.MapperUtil;
@@ -28,14 +26,14 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.reserve(request));
     }
 
-    @GetMapping
-    public ResponseEntity getReservation(@RequestParam @NotEmpty String nationalId) {
-        return ResponseEntity.ok(reservationService.searchReservation(nationalId));
+    @PostMapping("/search")
+    public ResponseEntity getReservation(@Valid @RequestBody SearchReservationRequest request) {
+        return ResponseEntity.ok(reservationService.searchReservation(request));
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteReservation(@RequestParam @NotEmpty String nationalId) {
-        return ResponseEntity.ok(reservationService.cancelReservation(nationalId));
+    @PostMapping("/delete")
+    public ResponseEntity cancelReservation(@Valid @RequestBody CancelReservationRequest request) {
+        return ResponseEntity.ok(reservationService.cancelReservation(request));
     }
 
     @PostMapping("/seats")

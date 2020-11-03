@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,9 +65,12 @@ public class User implements Serializable {
     }
 
     @Transient
-    public Reservation getLastReservation() {
+    public Reservation getReservation(LocalDate massDate, LocalTime massTime) {
         return reservations.stream()
-                .filter(r -> r.isActive() && r.getMass().getDate().isAfter(LocalDate.now()))
+                .filter(r -> r.isActive() &&
+                        r.getMass().getDate().equals(massDate) &&
+                        r.getMass().getTime().equals(massTime) &&
+                        r.getMass().getDate().isAfter(LocalDate.now()))
                 .findFirst()
                 .orElse(null);
     }

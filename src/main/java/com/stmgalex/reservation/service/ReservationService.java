@@ -1,16 +1,16 @@
 package com.stmgalex.reservation.service;
 
-import com.stmgalex.reservation.dto.AvailableSeatsRequest;
-import com.stmgalex.reservation.dto.ReservationRequest;
-import com.stmgalex.reservation.dto.ReservationResponse;
+import com.stmgalex.reservation.dto.*;
 import com.stmgalex.reservation.entity.Mass;
+
+import javax.validation.Valid;
 
 public interface ReservationService {
     ReservationResponse reserve(ReservationRequest request);
 
-    ReservationResponse cancelReservation(String nationalId);
+    ReservationResponse cancelReservation(@Valid CancelReservationRequest request);
 
-    ReservationResponse searchReservation(String nationalId);
+    ReservationResponse searchReservation(@Valid SearchReservationRequest request);
 
     Mass getAvailableSeats(AvailableSeatsRequest request);
 }
