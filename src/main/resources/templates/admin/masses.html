@@ -53,7 +53,7 @@
                                 </thead>
 
                                 <tbody>
-                                <tr th:each="mass : ${masses}" style="color: white;font-weight: bolder"
+                                <tr th:each="mass : ${masses}" style="color: white;"
                                     class="text-center">
                                     <td th:text="${mass.id}"></td>
                                     <td th:text="${mass.date}"></td>
@@ -61,7 +61,8 @@
                                     <td th:text="${mass.totalSeats}"></td>
                                     <td th:text="${mass.totalSeats - mass.reservedSeats}"></td>
                                     <td th:text="${mass.reservedSeats}"></td>
-                                    <td th:text="' % '+${mass.getAttendancePercentage()}"></td>
+                                    <td th:text="' %' +${#numbers.formatDecimal(mass.attendancePercentage, 1, 2, 'COMMA')}">
+                                    </td>
                                     <div th:if="${mass.enabled}">
                                         <td><i class="fas fa-lock-open"></i></td>
                                     </div>
