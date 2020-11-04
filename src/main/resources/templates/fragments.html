@@ -35,10 +35,14 @@
         </div>
     </div>
     <ul class="list-unstyled">
-        <li class="active"><a th:href="@{/admin}"> <i class="fas fa-home"></i>الرئيسية </a></li>
-        <li><a th:href="@{/admin/masses}"> <i class="fas fa-praying-hands"></i>القداسات </a></li>
-        <li><a th:href="@{/admin/masses}"><i class="far fa-address-book"></i>الحجوزات </a></li>
-        <li><a th:href="@{/admin/users}"> <i class="fas fa-user"></i>المستخدمين </a></li>
+        <li th:classappend="${content == 1}?active"><a th:href="@{/admin}"> <i class="fas fa-home"></i>الرئيسية </a>
+        </li>
+        <li th:classappend="${content == 2}?active"><a th:href="@{/admin/masses}"> <i class="fas fa-praying-hands"></i>القداسات
+        </a></li>
+        <li th:classappend="${content == 3}?active"><a th:href="@{/admin/masses}"><i class="far fa-address-book"></i>الحجوزات
+        </a></li>
+        <li th:classappend="${content == 4}?active"><a th:href="@{/admin/users}"> <i class="fas fa-user"></i>المستخدمين
+        </a></li>
     </ul>
 </nav>
 

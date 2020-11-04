@@ -11,9 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final AdminService adminService;
+    private static final int[] PAGE_SIZES = {5, 10, 20};
 
     @GetMapping({"", "/dashboard"})
     public String dashboard(Model model) {
@@ -40,19 +44,36 @@ public class AdminController {
 
         Page<Mass> massPage = adminService.getMasses(pageRequest);
 
-
         model.addAttribute("masses", massPage.getContent()
                 .stream()
                 .map(m -> MapperUtil.map(m, MassDto.class))
                 .sorted(Comparator.comparing(MassDto::getId))
                 .collect(Collectors.toList()));
 
-        model.addAttribute("currentPage", massPage);
+        model.addAttribute("page", massPage);
 
-        model.addAttribute("totalPages", massPage.getTotalPages());
-
-        model.addAttribute("totalItems", massPage.getTotalElements());
 
         return "admin/masses";
+    }
+
+    @GetMapping("/masses/close/{id}")
+    public String closeMass(@PathVariable int id) {
+        adminService.closeMass(id);
+        return "redirect:/admin/masses";
+    }
+
+    @GetMapping("/masses/open/{id}")
+    public String openMass(@PathVariable int id) {
+        adminService.openMass(id);
+        return "redirect:/admin/masses";
+    }
+
+    @GetMapping("/masses/{id}/reservations")
+    public void exportMassReservations(@PathVariable int id, HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users.xlsx";
+        response.setHeader(headerKey, headerValue);
+        adminService.exportMassReservations(id, response);
     }
 }
