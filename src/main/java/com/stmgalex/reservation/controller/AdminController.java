@@ -85,8 +85,8 @@ public class AdminController {
     }
 
     @GetMapping({"/reservations"})
-    public String reservations(Model model, @RequestParam(defaultValue = "0") int pageNumber,
-                         @RequestParam(defaultValue = "10") int size) {
+    public String reservations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+                               @RequestParam(defaultValue = "10") int size) {
 
         Sort sort = Sort.by("id").ascending();
 
