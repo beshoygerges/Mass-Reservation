@@ -10,12 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -52,6 +50,7 @@ public class AdminController {
 
         model.addAttribute("page", massPage);
 
+        model.addAttribute("mass", new MassDto());
 
         return "admin/masses";
     }
@@ -75,5 +74,11 @@ public class AdminController {
         String headerValue = "attachment; filename=users.xlsx";
         response.setHeader(headerKey, headerValue);
         adminService.exportMassReservations(id, response);
+    }
+
+    @PostMapping("/masses")
+    public String updateMass(@Valid @ModelAttribute("mass") MassDto mass) {
+        adminService.updateMass(mass);
+        return "redirect:/admin/masses";
     }
 }

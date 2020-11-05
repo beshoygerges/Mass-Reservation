@@ -23,4 +23,6 @@ public interface AdminService {
     void openMass(int id);
 
     void exportMassReservations(int id, HttpServletResponse response) throws IOException;
+
+    void updateMass(MassDto massDto);
 }

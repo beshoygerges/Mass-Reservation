@@ -114,6 +114,12 @@ public class AdminServiceImpl implements AdminService {
         outputStream.close();
     }
 
+    @Transactional
+    @Override
+    public void updateMass(MassDto massDto) {
+        massRepository.updateMassById(massDto.getTotalSeats(), massDto.getReservedSeats(), massDto.getId());
+    }
+
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {
 
         Row row = sheet.createRow(0);
