@@ -16,6 +16,6 @@ public interface MassRepository extends JpaRepository<Mass, Integer> {
     Optional<Mass> findByDateAndTime(LocalDate date, LocalTime time);
 
     @Modifying
-    @Query("update Mass m set m.totalSeats = ?1, m.reservedSeats = ?2 where m.id = ?3")
+    @Query("update Mass m set m.totalSeats = ?1, m.reservedSeats = m.reservedSeats+?2 where m.id = ?3")
     void updateMassById(Integer totalSeats, Integer reservedSeats, Integer id);
 }
