@@ -5,6 +5,7 @@ import com.stmgalex.reservation.dto.Statistics;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.Reservation;
 import com.stmgalex.reservation.exception.MassNotFoundException;
+import com.stmgalex.reservation.exception.ReservationNotFoundException;
 import com.stmgalex.reservation.repository.MassRepository;
 import com.stmgalex.reservation.repository.ReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +29,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.apache.poi.ss.util.CellUtil.createCell;
 
 @AllArgsConstructor
 @Service
@@ -118,6 +118,27 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void updateMass(MassDto massDto) {
         massRepository.updateMassById(massDto.getTotalSeats(), massDto.getReservedSeats(), massDto.getId());
+    }
+
+    @Override
+    public Page<Reservation> getReservations(PageRequest pageRequest) {
+        return reservationRepository.findAll(pageRequest);
+    }
+
+    @Transactional
+    @Override
+    public void closeReservation(int id) {
+        Optional<Reservation> optional = reservationRepository.findById(id);
+        Reservation reservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
+        reservation.setActive(false);
+    }
+
+    @Transactional
+    @Override
+    public void openReservation(int id) {
+        Optional<Reservation> optional = reservationRepository.findById(id);
+        Reservation reservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
+        reservation.setActive(true);
     }
 
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {

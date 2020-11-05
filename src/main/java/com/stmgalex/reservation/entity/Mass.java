@@ -84,4 +84,9 @@ public class Mass implements Serializable {
     public int getAvailableSeats() {
         return totalSeats - reservedSeats;
     }
+
+    @Transient
+    public boolean isExpired() {
+        return date.isBefore(LocalDate.now());
+    }
 }

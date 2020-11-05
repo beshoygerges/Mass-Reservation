@@ -1,7 +1,9 @@
 package com.stmgalex.reservation.controller;
 
 import com.stmgalex.reservation.dto.MassDto;
+import com.stmgalex.reservation.dto.ReservationDto;
 import com.stmgalex.reservation.entity.Mass;
+import com.stmgalex.reservation.entity.Reservation;
 import com.stmgalex.reservation.service.AdminService;
 import com.stmgalex.reservation.util.MapperUtil;
 import lombok.AllArgsConstructor;
@@ -80,5 +82,38 @@ public class AdminController {
     public String updateMass(@Valid @ModelAttribute("mass") MassDto mass) {
         adminService.updateMass(mass);
         return "redirect:/admin/masses";
+    }
+
+    @GetMapping({"/reservations"})
+    public String reservations(Model model, @RequestParam(defaultValue = "0") int pageNumber,
+                         @RequestParam(defaultValue = "10") int size) {
+
+        Sort sort = Sort.by("id").ascending();
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+
+        Page<Reservation> page = adminService.getReservations(pageRequest);
+
+        model.addAttribute("reservations", page.getContent()
+                .stream()
+                .map(m -> MapperUtil.map(m, ReservationDto.class))
+                .sorted(Comparator.comparing(ReservationDto::getId))
+                .collect(Collectors.toList()));
+
+        model.addAttribute("page", page);
+
+        return "admin/reservations";
+    }
+
+    @GetMapping("/reservations/close/{id}")
+    public String closeReservation(@PathVariable int id) {
+        adminService.closeReservation(id);
+        return "redirect:/admin/reservations";
+    }
+
+    @GetMapping("/reservations/open/{id}")
+    public String openReservation(@PathVariable int id) {
+        adminService.openReservation(id);
+        return "redirect:/admin/reservations";
     }
 }

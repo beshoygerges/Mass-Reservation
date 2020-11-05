@@ -3,7 +3,9 @@ package com.stmgalex.reservation.service;
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.Statistics;
 import com.stmgalex.reservation.entity.Mass;
+import com.stmgalex.reservation.entity.Reservation;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,4 +27,10 @@ public interface AdminService {
     void exportMassReservations(int id, HttpServletResponse response) throws IOException;
 
     void updateMass(MassDto massDto);
+
+    Page<Reservation> getReservations(PageRequest pageRequest);
+
+    void closeReservation(int id);
+
+    void openReservation(int id);
 }

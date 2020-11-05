@@ -35,12 +35,13 @@
                         <div class="block">
                             <a href="#" class="btn btn-outline-success btn-blk" role="button"
                                style="width:200px;margin-bottom: 1rem;">اضافة قداس</a>
-                            <table id="dtBasicExample"
+                            <table id="dtBasicExample" dir="rtl"
                                    class="table table-dark table-striped table-hover table-responsive w-100 d-block d-md-table">
 
                                 <thead>
                                 <tr style="color: white" class="text-center">
                                     <th class="th-sm">#</th>
+                                    <th class="th-sm">رقم القداس</th>
                                     <th class="th-sm">تاريخ القداس</th>
                                     <th class="th-sm">وقت القداس</th>
                                     <th class="th-sm">المقاعد</th>
@@ -53,8 +54,9 @@
                                 </thead>
 
                                 <tbody>
-                                <tr th:each="mass : ${masses}" style="color: white;"
+                                <tr th:each="mass,iter : ${masses}" style="color: white;"
                                     class="text-center">
+                                    <td th:text=" ${iter.index}+1"></td>
                                     <td th:text="${mass.id}"></td>
                                     <td th:text="${mass.date}"></td>
                                     <td th:text="${mass.time}"></td>
@@ -76,28 +78,33 @@
                                                    th:data-massTime="${mass.time}"
                                                    th:onclick="|editMass(${mass.id},this.getAttribute('data-massDate'),this.getAttribute('data-massTime'),${mass.totalSeats},${mass.reservedSeats})|"
                                                    class="btn btn-outline-info " role="button"
-                                                   style="width: 60px"><i class="fas fa-calendar-plus"></i></a>
+                                                   style="width: 60px">
+                                                    <i class="fas fa-calendar-plus"></i></a>
                                             </div>
 
                                             <div class="col-lg-4">
                                                 <a th:href="@{/admin/masses/{id}/reservations(id=${mass.id})}"
-                                                   class="btn btn-outline-success " role="button" style="width: 60px"><i
-                                                        class="fas fa-download"></i></a>
+                                                   class="btn btn-outline-success" role="button"
+                                                   style="width: 60px">
+                                                    <i class="fas fa-download"></i></a>
                                             </div>
 
                                             <div th:if="${mass.enabled}">
                                                 <div class="col-lg-4">
                                                     <a th:href="@{/admin/masses/close/{id}(id=${mass.id})}"
                                                        class="btn btn-outline-danger " role="button"
-                                                       style="width: 60px"><i class="fas fa-lock"></i></a>
+                                                       style="width: 60px">
+                                                        <i class="fas fa-lock"></i></a>
                                                 </div>
                                             </div>
 
                                             <div th:if="${!mass.enabled}">
                                                 <div class="col-lg-4">
                                                     <a th:href="@{/admin/masses/open/{id}(id=${mass.id})}"
-                                                       class="btn btn-outline-warning " role="button"
-                                                       style="width: 60px"><i class="fas fa-lock-open"></i></a>
+                                                       class="btn btn-outline-warning" role="button"
+                                                       style="width: 60px">
+                                                        <i class="fas fa-lock-open"></i>
+                                                    </a>
                                                 </div>
                                             </div>
 
@@ -117,7 +124,7 @@
                                     </span>
                                 </th:block>
                                 <span th:if="${page.hasNext()}">
-                                    <a th:href="@{/admin/masses(page=${page.number+1},size=${page.size})}">القادم</a>
+                                    <a th:href="@{/admin/masses(page=${page.number+1},size=${page.size})}">التالي</a>
                                 </span>
                             </div>
                         </div>
