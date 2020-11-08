@@ -39,4 +39,6 @@ public class MassDto implements Serializable {
 
     private double attendancePercentage;
 
+    private String day;
+
 }

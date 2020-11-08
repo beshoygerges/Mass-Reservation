@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -88,5 +89,25 @@ public class Mass implements Serializable {
     @Transient
     public boolean isExpired() {
         return date.isBefore(LocalDate.now());
+    }
+
+    @Transient
+    public String getDay() {
+        if (date.getDayOfWeek().equals(DayOfWeek.FRIDAY))
+            return "الجمعة";
+        if (date.getDayOfWeek().equals(DayOfWeek.SATURDAY))
+            return "السبت";
+        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+            return "الاحد";
+        if (date.getDayOfWeek().equals(DayOfWeek.MONDAY))
+            return "الاثنين";
+        if (date.getDayOfWeek().equals(DayOfWeek.TUESDAY))
+            return "الثلاثاء";
+        if (date.getDayOfWeek().equals(DayOfWeek.WEDNESDAY))
+            return "الاربعاء";
+        if (date.getDayOfWeek().equals(DayOfWeek.THURSDAY))
+            return "الخميس";
+        return null;
+
     }
 }

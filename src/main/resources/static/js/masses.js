@@ -6,6 +6,5 @@ function editMass(id, date, time, totalSeats, reservedSeats) {
         text: time
     }));
     $('#totalSeats').val(totalSeats);
-    $('#reservedSeats').val(0);
     $('#editMassModal').modal('show');
 }

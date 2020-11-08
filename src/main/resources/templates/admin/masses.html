@@ -40,10 +40,10 @@
 
                                 <thead>
                                 <tr style="color: white" class="text-center">
-                                    <th class="th-sm">#</th>
-                                    <th class="th-sm">رقم القداس</th>
-                                    <th class="th-sm">تاريخ القداس</th>
-                                    <th class="th-sm">وقت القداس</th>
+                                    <th class="th-sm">الرقم</th>
+                                    <th class="th-sm">اليوم</th>
+                                    <th class="th-sm">التاريخ</th>
+                                    <th class="th-sm">الوقت</th>
                                     <th class="th-sm">المقاعد</th>
                                     <th class="th-sm">المقاعد المتاحة</th>
                                     <th class="th-sm">المقاعد المحجوزة</th>
@@ -56,8 +56,8 @@
                                 <tbody>
                                 <tr th:each="mass,iter : ${masses}" style="color: white;"
                                     class="text-center">
-                                    <td th:text=" ${iter.index}+1"></td>
                                     <td th:text="${mass.id}"></td>
+                                    <td th:text="${mass.day}"></td>
                                     <td th:text="${mass.date}"></td>
                                     <td th:text="${mass.time}"></td>
                                     <td th:text="${mass.totalSeats}"></td>
@@ -188,13 +188,14 @@
                                class="form-control"
                                id="totalSeats"
                                th:field="*{totalSeats}"
-                               required>
+                               readonly>
                     </div>
 
                     <div class="form-group">
                         <input type="number"
                                class="form-control"
                                id="reservedSeats"
+                               placeholder="عدد المقاعد المراد حجزها"
                                th:field="*{reservedSeats}"
                                required>
                     </div>
