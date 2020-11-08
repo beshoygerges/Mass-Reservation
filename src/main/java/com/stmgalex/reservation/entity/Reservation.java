@@ -2,9 +2,12 @@ package com.stmgalex.reservation.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
@@ -30,6 +33,12 @@ public class Reservation implements Serializable {
 
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean active = true;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public Reservation(User user, Mass mass) {
         this.user = user;
