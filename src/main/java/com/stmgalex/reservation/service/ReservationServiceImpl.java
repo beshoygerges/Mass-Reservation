@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -33,9 +34,19 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public synchronized ReservationResponse reserve(final ReservationRequest request) {
 
-        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
+        List<User> users = userRepository.findByNationalIdOrName(request.getNationalId(), request.getName());
 
-        User user = optionalUser.orElse(createUser(request));
+        User user = null;
+
+        if (users.isEmpty())
+            user = createUser(request);
+
+        else if (users.size()==1)
+            user=users.get(0);
+
+        else  throw new RuntimeException("برجاء التأكد من الاسم والرقم القومي");
+
+        user.setName(request.getName());
 
         Mass mass = user.getLastActiveMass();
 
@@ -86,7 +97,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationResponse searchReservation(final SearchReservationRequest request) {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
-        Reservation reservation = user.getReservation(request.getMassDate(),request.getMassTime());
+        Reservation reservation = user.getReservation(request.getMassDate(), request.getMassTime());
         if (Objects.isNull(reservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
