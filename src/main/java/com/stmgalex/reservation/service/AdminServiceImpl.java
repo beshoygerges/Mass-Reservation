@@ -4,12 +4,14 @@ import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.Statistics;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.Reservation;
+import com.stmgalex.reservation.entity.User;
 import com.stmgalex.reservation.exception.MassNotFoundException;
 import com.stmgalex.reservation.exception.ReservationNotFoundException;
 import com.stmgalex.reservation.repository.MassRepository;
 import com.stmgalex.reservation.repository.ReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
 import com.stmgalex.reservation.util.MapperUtil;
+import com.stmgalex.reservation.util.NumberUtil;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -29,7 +31,11 @@ import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.stmgalex.reservation.util.NumberUtil.isWithinRange;
 
 @AllArgsConstructor
 @Service
@@ -43,6 +49,7 @@ public class AdminServiceImpl implements AdminService {
     public Statistics getStatistics() {
         List<Mass> masses = massRepository.findAll();
         List<Reservation> reservations = reservationRepository.findAll();
+        List<User> users = userRepository.findAll();
 
         int totalAttendants = masses.stream()
                 .filter(mass -> mass.getDate().isBefore(LocalDate.now().plusDays(1)))
@@ -57,12 +64,18 @@ public class AdminServiceImpl implements AdminService {
 
         return Statistics.builder()
                 .masses(masses.size())
-                .users(userRepository.count())
+                .users(users.size())
                 .reservations(reservations.size())
                 .approvedReservations(reservations.stream().filter(Reservation::isActive).count())
                 .canceledReservations(reservations.stream().filter(r -> !r.isActive()).count())
                 .completedMasses(masses.stream().filter(m -> !m.haveSeats()).count())
                 .attendancePercentage(totalAttendants * 1.0 / totalAvailable * 100d)
+                .leesThan10(getUsersAtAge(users, user -> isWithinRange(1, 10, user.getAge())))
+                .lessThan20(getUsersAtAge(users, user -> isWithinRange(11, 20, user.getAge())))
+                .lessThan30(getUsersAtAge(users, user -> isWithinRange(21, 30, user.getAge())))
+                .lessThan40(getUsersAtAge(users, user -> isWithinRange(31, 40, user.getAge())))
+                .lessThan50(getUsersAtAge(users, user -> isWithinRange(41, 50, user.getAge())))
+                .moreThan50(getUsersAtAge(users, user -> user.getAge() >= 51))
                 .build();
     }
 
@@ -211,5 +224,12 @@ public class AdminServiceImpl implements AdminService {
             createCell(sheet, row, columnCount++, reservation.getMass().getTime(), style);
             i++;
         }
+    }
+
+    private int getUsersAtAge(List<User> users, Predicate<User> predicate) {
+        long count = users.stream()
+                .filter(predicate)
+                .count();
+        return (int) count;
     }
 }

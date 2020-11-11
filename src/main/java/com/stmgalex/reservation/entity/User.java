@@ -33,6 +33,12 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String mobileNumber;
 
+    @Column
+    private LocalDate birthdate;
+
+    @Column(columnDefinition = "int default 0")
+    private int age;
+
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;

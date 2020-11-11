@@ -8,6 +8,7 @@ import com.stmgalex.reservation.exception.*;
 import com.stmgalex.reservation.repository.MassRepository;
 import com.stmgalex.reservation.repository.ReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
+import com.stmgalex.reservation.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,12 +42,11 @@ public class ReservationServiceImpl implements ReservationService {
         if (users.isEmpty())
             user = createUser(request);
 
-        else if (users.size()==1)
-            user=users.get(0);
+        else if (users.size() == 1)
+            user = users.get(0);
 
-        else  throw new RuntimeException("برجاء التأكد من الاسم والرقم القومي");
-
-        user.setName(request.getName());
+        else
+            throw new RuntimeException("برجاء التأكد من الاسم والرقم القومي");
 
         Mass mass = user.getLastActiveMass();
 
@@ -65,6 +65,12 @@ public class ReservationServiceImpl implements ReservationService {
         if (!mass.haveSeats()) {
             throw new MassHaveNoSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
         }
+
+        user.setName(request.getName());
+
+        user.setBirthdate(DateUtil.getBirthDate(request.getNationalId()));
+
+        user.setAge(DateUtil.calculateAge(user.getBirthdate()));
 
         mass.reserveSeat();
 

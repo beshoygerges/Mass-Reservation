@@ -41,4 +41,6 @@ public class MassDto implements Serializable {
 
     private String day;
 
+    private int age;
+
 }
