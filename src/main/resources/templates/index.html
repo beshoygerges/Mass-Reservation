@@ -195,9 +195,10 @@
                         <input type="text"
                                class="form-control"
                                id="name"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الاسم')"
+                               pattern="^([\u0621-\u064A]{2,}\s){3}([\u0621-\u064A]{2,})$"
+                               oninvalid="this.setCustomValidity('من فضلك ادخل الاسم رباعي')"
                                oninput="setCustomValidity('')"
-                               placeholder="الاسم" required>
+                               placeholder="الاسم رباعي" required>
                     </div>
 
                     <div class="form-group">
