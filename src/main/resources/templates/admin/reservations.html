@@ -40,9 +40,9 @@
                                 <thead>
                                 <tr style="color: white" class="text-center">
                                     <th class="th-sm">رقم الحجز</th>
-                                    <th class="th-sm">رقم المقعد</th>
                                     <th class="th-sm">الاسم</th>
                                     <th class="th-sm">الرقم القومي</th>
+                                    <th class="th-sm">الموبايل</th>
                                     <th class="th-sm">اليوم</th>
                                     <th class="th-sm">التاريخ</th>
                                     <th class="th-sm">الوقت</th>
@@ -55,9 +55,9 @@
                                 <tr th:each="reservation,iter : ${reservations}" style="color: white;"
                                     class="text-center">
                                     <td th:text="${reservation.id}"></td>
-                                    <td th:text="${reservation.seatNumber}"></td>
                                     <td th:text="${reservation.user.name}"></td>
                                     <td th:text="${reservation.user.nationalId}"></td>
+                                    <td th:text="${reservation.user.mobileNumber}"></td>
                                     <td th:text="${reservation.mass.day}"></td>
                                     <td th:text="${reservation.mass.date}"></td>
                                     <td th:text="${reservation.mass.time}"></td>

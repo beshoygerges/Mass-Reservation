@@ -25,6 +25,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -154,9 +155,10 @@ public class AdminServiceImpl implements AdminService {
         style.setVerticalAlignment(VerticalAlignment.CENTER);
         style.setAlignment(HorizontalAlignment.CENTER);
         createCell(sheet, row, 0, "رقم الحجز", style);
-        createCell(sheet, row, 1, "رقم المقعد", style);
-        createCell(sheet, row, 2, "الاسم", style);
-        createCell(sheet, row, 3, "الرقم القومي", style);
+        createCell(sheet, row, 1, "الاسم", style);
+        createCell(sheet, row, 2, "الرقم القومي", style);
+        createCell(sheet, row, 3, "اليوم", style);
+        createCell(sheet, row, 4, "الساعة", style);
 
     }
 
@@ -164,10 +166,16 @@ public class AdminServiceImpl implements AdminService {
         sheet.setColumnWidth(columnCount, 6000);
         Cell cell = row.createCell(columnCount);
         if (value instanceof Integer) {
-            sheet.setColumnWidth(columnCount, 3000);
+            sheet.setColumnWidth(columnCount, 2000);
             cell.setCellValue((Integer) value);
         } else if (value instanceof Boolean) {
             cell.setCellValue((Boolean) value);
+        } else if (value instanceof LocalDate) {
+            sheet.setColumnWidth(columnCount, 3000);
+            cell.setCellValue(((LocalDate) value).toString());
+        } else if (value instanceof LocalTime) {
+            sheet.setColumnWidth(columnCount, 2000);
+            cell.setCellValue(((LocalTime) value).toString());
         } else {
             cell.setCellValue((String) value);
         }
@@ -179,7 +187,7 @@ public class AdminServiceImpl implements AdminService {
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
-        font.setFontHeight(14);
+        font.setFontHeight(12);
         style.setFont(font);
         style.setWrapText(true);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -189,15 +197,19 @@ public class AdminServiceImpl implements AdminService {
         List<Reservation> reservations = mass.getReservations()
                 .stream()
                 .filter(Reservation::isActive)
+                .sorted(Comparator.comparing(o -> o.getUser().getName()))
                 .collect(Collectors.toList());
 
+        int i = 0;
         for (Reservation reservation : reservations) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
-            createCell(sheet, row, columnCount++, reservation.getId(), style);
-            createCell(sheet, row, columnCount++, reservation.getSeatNumber(), style);
+            createCell(sheet, row, columnCount++, i + 1, style);
             createCell(sheet, row, columnCount++, reservation.getUser().getName(), style);
             createCell(sheet, row, columnCount++, reservation.getUser().getNationalId(), style);
+            createCell(sheet, row, columnCount++, reservation.getMass().getDate(), style);
+            createCell(sheet, row, columnCount++, reservation.getMass().getTime(), style);
+            i++;
         }
     }
 }
