@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -36,13 +38,14 @@ public class AdminController {
 
     @GetMapping({"/masses"})
     public String masses(Model model, @RequestParam(defaultValue = "0") int page,
-                         @RequestParam(defaultValue = "10") int size) {
+                         @RequestParam(defaultValue = "10") int size,
+                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         Sort sort = Sort.by("id").ascending();
 
         PageRequest pageRequest = PageRequest.of(page, size, sort);
 
-        Page<Mass> massPage = adminService.getMasses(pageRequest);
+        Page<Mass> massPage = adminService.getMasses(pageRequest,date);
 
         model.addAttribute("masses", massPage.getContent()
                 .stream()

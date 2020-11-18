@@ -10,15 +10,13 @@ import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.time.LocalDate;
 
 public interface AdminService {
 
     Statistics getStatistics();
 
-    List<MassDto> getMasses();
-
-    Page<Mass> getMasses(Pageable pageRequest);
+    Page<Mass> getMasses(Pageable pageRequest, LocalDate date);
 
     void closeMass(int id);
 

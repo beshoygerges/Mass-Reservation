@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -77,18 +78,14 @@ public class AdminServiceImpl implements AdminService {
                 .build();
     }
 
-    @Override
-    public List<MassDto> getMasses() {
-        return massRepository.findAll()
-                .stream()
-                .map(m -> MapperUtil.map(m, MassDto.class))
-                .sorted(Comparator.comparing(MassDto::getId))
-                .collect(Collectors.toList());
-    }
 
     @Override
-    public Page<Mass> getMasses(Pageable pageable) {
-        return massRepository.findAllByDateGreaterThanEqual(pageable, LocalDate.now());
+    public Page<Mass> getMasses(Pageable pageable, LocalDate date) {
+        if (Objects.nonNull(date))
+            return massRepository.findAllByDateEquals(pageable, date);
+        else
+            return massRepository.findAllByDateGreaterThanEqual(pageable, LocalDate.now());
+
     }
 
     @Transactional
