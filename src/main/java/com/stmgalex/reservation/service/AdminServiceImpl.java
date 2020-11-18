@@ -11,7 +11,6 @@ import com.stmgalex.reservation.repository.MassRepository;
 import com.stmgalex.reservation.repository.ReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
 import com.stmgalex.reservation.util.MapperUtil;
-import com.stmgalex.reservation.util.NumberUtil;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -31,7 +30,6 @@ import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -89,8 +87,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<Mass> getMasses(Pageable pageRequest) {
-        return massRepository.findAll(pageRequest);
+    public Page<Mass> getMasses(Pageable pageable) {
+        return massRepository.findAllByDateGreaterThanEqual(pageable, LocalDate.now());
     }
 
     @Transactional
