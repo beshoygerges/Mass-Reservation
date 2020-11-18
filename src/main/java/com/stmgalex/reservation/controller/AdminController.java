@@ -88,7 +88,7 @@ public class AdminController {
     public String reservations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
                                @RequestParam(defaultValue = "10") int size) {
 
-        Sort sort = Sort.by("id").ascending();
+        Sort sort = Sort.by("id").descending();
 
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
 
