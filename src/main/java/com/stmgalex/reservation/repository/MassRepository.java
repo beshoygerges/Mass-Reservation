@@ -24,5 +24,5 @@ public interface MassRepository extends JpaRepository<Mass, Integer> {
 
     Page<Mass> findAllByDateGreaterThanEqual(Pageable pageable, LocalDate date);
 
-    Page<Mass> findAllByDateEqual(Pageable pageable, LocalDate date);
+    Page<Mass> findAllByDateEquals(Pageable pageable, LocalDate date);
 }
