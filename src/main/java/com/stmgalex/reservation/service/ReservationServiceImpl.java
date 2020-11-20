@@ -28,7 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final EveningReservationRepository eveningReservationRepository;
 
     @Value("${mass.interval.days}")
-    private int nextMassAfter;
+    private int reservationPeriod;
 
     private static int compareByEveningDate(EveningReservation e1, EveningReservation e2) {
         return e2.getEvening().getDate().compareTo(e1.getEvening().getDate());
@@ -53,7 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
         Mass mass = user.getLastActiveMass();
 
         if (Objects.nonNull(mass) && !isExceedMassIntervals(mass, request.getMassDate())) {
-            throw new MassIntervalNotExceededException("    عفوا يمكنك الحجز مجددا من يوم " + mass.getDate().plusDays(nextMassAfter) + " ");
+            throw new MassIntervalNotExceededException("    عفوا يمكنك الحجز مجددا من يوم " + mass.getDate().plusDays(reservationPeriod) + " ");
         }
 
         Optional<Mass> optionalMass = massRepository.findByDateAndTime(request.getMassDate(), request.getMassTime());
@@ -166,12 +166,13 @@ public class ReservationServiceImpl implements ReservationService {
 
         user.getEveningReservations()
                 .stream()
+                .filter(EveningReservation::isActive)
                 .sorted(ReservationServiceImpl::compareByEveningDate)
                 .map(EveningReservation::getEvening)
+                .filter(lastEvening -> !isValidPeriod(evening, lastEvening))
                 .findFirst()
-                .ifPresent(evening1 -> {
-                    if (evening1.getDate().plusDays(10).isAfter(evening.getDate()))
-                        throw new RuntimeException("عفوا لا يمكنك الحجز قبل 10 ايام من تاريخ اخر سهرة");
+                .ifPresent(lastEvening -> {
+                    throw new RuntimeException("عفوا يجب ان تكون الفترة بين كل سهرة والاخري مدة لا تقل عن 10 ايام");
                 });
 
 
@@ -192,6 +193,11 @@ public class ReservationServiceImpl implements ReservationService {
         return new ReservationResponse(reservation);
     }
 
+    private boolean isValidPeriod(Evening evening, Evening lastEvening) {
+        long days = DAYS.between(evening.getDate(), lastEvening.getDate());
+        return days >= reservationPeriod || days <= -1 * reservationPeriod;
+    }
+
     private User createUser(EveningReservationRequest request) {
         User user = new User();
         user.setMobileNumber(request.getMobileNumber());
@@ -201,7 +207,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private boolean isExceedMassIntervals(Mass mass, LocalDate massDate) {
-        return DAYS.between(mass.getDate(), massDate) >= nextMassAfter;
+        long days = DAYS.between(mass.getDate(), massDate);
+        return days >= reservationPeriod || days <= -1 * reservationPeriod;
     }
 
     private User createUser(MassReservationRequest request) {
