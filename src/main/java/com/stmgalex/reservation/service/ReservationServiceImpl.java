@@ -30,6 +30,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Value("${mass.interval.days}")
     private int nextMassAfter;
 
+    private static int compareByEveningDate(EveningReservation e1, EveningReservation e2) {
+        return e2.getEvening().getDate().compareTo(e1.getEvening().getDate());
+    }
+
     @Override
     public synchronized ReservationResponse reserve(final MassReservationRequest request) {
 
@@ -159,6 +163,17 @@ public class ReservationServiceImpl implements ReservationService {
                 .ifPresent(a -> {
                     throw new RuntimeException("عفوا لقد قمت بحجز هذه السهرة من قبل");
                 });
+
+        user.getEveningReservations()
+                .stream()
+                .sorted(ReservationServiceImpl::compareByEveningDate)
+                .map(EveningReservation::getEvening)
+                .findFirst()
+                .ifPresent(evening1 -> {
+                    if (evening1.getDate().plusDays(10).isAfter(evening.getDate()))
+                        throw new RuntimeException("عفوا لا يمكنك الحجز قبل 10 ايام من تاريخ اخر سهرة");
+                });
+
 
         user.setName(request.getName());
 
