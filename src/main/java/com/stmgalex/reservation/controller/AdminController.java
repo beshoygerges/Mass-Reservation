@@ -45,7 +45,7 @@ public class AdminController {
 
         PageRequest pageRequest = PageRequest.of(page, size, sort);
 
-        Page<Mass> massPage = adminService.getMasses(pageRequest,date);
+        Page<Mass> massPage = adminService.getMasses(pageRequest, date);
 
         model.addAttribute("masses", massPage.getContent()
                 .stream()
@@ -87,7 +87,7 @@ public class AdminController {
         return "redirect:/admin/masses";
     }
 
-    @GetMapping({"/reservations"})
+    @GetMapping({"/masses/reservations"})
     public String reservations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
                                @RequestParam(defaultValue = "10") int size) {
 
@@ -108,15 +108,15 @@ public class AdminController {
         return "admin/reservations";
     }
 
-    @GetMapping("/reservations/close/{id}")
+    @GetMapping("/masses/reservations/{id}/close")
     public String closeReservation(@PathVariable int id) {
         adminService.closeReservation(id);
-        return "redirect:/admin/reservations";
+        return "redirect:/admin/masses/reservations";
     }
 
-    @GetMapping("/reservations/open/{id}")
+    @GetMapping("/masses/reservations/{id}/open")
     public String openReservation(@PathVariable int id) {
         adminService.openReservation(id);
-        return "redirect:/admin/reservations";
+        return "redirect:/admin/masses/reservations";
     }
 }

@@ -25,7 +25,7 @@
     <div class="page-content">
         <div class="page-header">
             <div class="container-fluid">
-                <h2 class="h5 no-margin-bottom">الحجوزات</h2>
+                <h2 class="h5 no-margin-bottom">حجوزات القداسات</h2>
             </div>
         </div>
         <section class="no-padding-top">
@@ -52,7 +52,7 @@
                                 </thead>
 
                                 <tbody>
-                                <tr th:each="massReservation,iter : ${massReservations}" style="color: white;"
+                                <tr th:each="massReservation,iter : ${reservations}" style="color: white;"
                                     class="text-center">
                                     <td th:text="${massReservation.id}"></td>
                                     <td th:text="${massReservation.user.name}"></td>
@@ -75,7 +75,7 @@
 
                                             <div th:if="${massReservation.active}">
                                                 <div class="col-lg-6">
-                                                    <a th:href="@{/admin/massReservations/close/{id}(id=${massReservation.id})}"
+                                                    <a th:href="@{/admin/masses/reservations/{id}/close(id=${massReservation.id})}"
                                                        class="btn btn-outline-danger " role="button"
                                                        style="width: 60px">
                                                         <i class="fas fa-lock"></i></a>
@@ -84,7 +84,7 @@
 
                                             <div th:if="${!massReservation.active}">
                                                 <div class="col-lg-6">
-                                                    <a th:href="@{/admin/massReservations/open/{id}(id=${massReservation.id})}"
+                                                    <a th:href="@{/admin/masses/reservations/{id}/open(id=${massReservation.id})}"
                                                        class="btn btn-outline-warning" role="button"
                                                        style="width: 60px">
                                                         <i class="fas fa-lock-open"></i>
@@ -101,18 +101,18 @@
                             <div class="pagination-div text-center">
 
                                 <span th:if="${page.hasPrevious()}">
-                                    <a th:href="@{/admin/massReservations(page=${page.number-1},size=${page.size})}">السابق</a>
+                                    <a th:href="@{/admin/masses/reservations(page=${page.number-1},size=${page.size})}">السابق</a>
                                 </span>
 
                                 <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
                                     <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
                                     <span th:unless="${page.number == i}">
-                                         <a th:href="@{/admin/massReservations(page=${i},size=${page.size})}">[[${i}+1]]</a>
+                                         <a th:href="@{/admin/masses/reservations(page=${i},size=${page.size})}">[[${i}+1]]</a>
                                     </span>
                                 </th:block>
 
                                 <span th:if="${page.hasNext()}">
-                                    <a th:href="@{/admin/massReservations(page=${page.number+1},size=${page.size})}">التالي</a>
+                                    <a th:href="@{/admin/masses/reservations(page=${page.number+1},size=${page.size})}">التالي</a>
                                 </span>
                             </div>
                         </div>
