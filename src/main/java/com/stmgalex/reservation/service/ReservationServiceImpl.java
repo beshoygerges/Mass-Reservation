@@ -130,7 +130,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationResponse reserve(EveningReservationRequest request) {
+    public synchronized ReservationResponse reserve(EveningReservationRequest request) {
         List<User> users = userRepository.findByNationalIdOrName(request.getNationalId(), request.getName());
 
         User user = null;
