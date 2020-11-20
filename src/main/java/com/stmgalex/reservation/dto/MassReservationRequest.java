@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 @Data
-public class ReservationRequest implements Serializable {
+public class MassReservationRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "من فضلك ادخل الاسم")

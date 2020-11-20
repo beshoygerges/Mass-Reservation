@@ -1,13 +1,9 @@
 package com.stmgalex.reservation.service;
 
 import com.stmgalex.reservation.dto.*;
-import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.entity.Reservation;
-import com.stmgalex.reservation.entity.User;
+import com.stmgalex.reservation.entity.*;
 import com.stmgalex.reservation.exception.*;
-import com.stmgalex.reservation.repository.MassRepository;
-import com.stmgalex.reservation.repository.ReservationRepository;
-import com.stmgalex.reservation.repository.UserRepository;
+import com.stmgalex.reservation.repository.*;
 import com.stmgalex.reservation.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,13 +23,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final UserRepository userRepository;
     private final MassRepository massRepository;
-    private final ReservationRepository reservationRepository;
+    private final EveningRepository eveningRepository;
+    private final MassReservationRepository massReservationRepository;
+    private final EveningReservationRepository eveningReservationRepository;
 
     @Value("${mass.interval.days}")
     private int nextMassAfter;
 
     @Override
-    public synchronized ReservationResponse reserve(final ReservationRequest request) {
+    public synchronized ReservationResponse reserve(final MassReservationRequest request) {
 
         List<User> users = userRepository.findByNationalIdOrName(request.getNationalId(), request.getName());
 
@@ -56,14 +54,14 @@ public class ReservationServiceImpl implements ReservationService {
 
         Optional<Mass> optionalMass = massRepository.findByDateAndTime(request.getMassDate(), request.getMassTime());
 
-        mass = optionalMass.orElseThrow(() -> new MassNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
+        mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
 
         if (!mass.isEnabled()) {
-            throw new MassNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
+            throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
         }
 
         if (!mass.haveSeats()) {
-            throw new MassHaveNoSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
+            throw new NoAvaialableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
         }
 
         user.setName(request.getName());
@@ -76,13 +74,13 @@ public class ReservationServiceImpl implements ReservationService {
 
         userRepository.save(user);
 
-        Reservation reservation = new Reservation(user, mass);
+        MassReservation massReservation = new MassReservation(user, mass);
 
-        reservation.setSeatNumber(mass.getReservedSeats());
+        massReservation.setSeatNumber(mass.getReservedSeats());
 
-        reservation = reservationRepository.save(reservation);
+        massReservation = massReservationRepository.save(massReservation);
 
-        return new ReservationResponse(reservation);
+        return new ReservationResponse(massReservation);
     }
 
     @Transactional
@@ -90,24 +88,24 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationResponse cancelReservation(final CancelReservationRequest request) {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
-        Reservation reservation = user.getReservation(request.getMassDate(), request.getMassTime());
-        if (Objects.isNull(reservation)) {
+        MassReservation massReservation = user.getMassReservation(request.getMassDate(), request.getMassTime());
+        if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
-        reservation.setActive(false);
-        reservation.getMass().releaseSeat();
-        return new ReservationResponse(reservation);
+        massReservation.setActive(false);
+        massReservation.getMass().releaseSeat();
+        return new ReservationResponse(massReservation);
     }
 
     @Override
     public ReservationResponse searchReservation(final SearchReservationRequest request) {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
-        Reservation reservation = user.getReservation(request.getMassDate(), request.getMassTime());
-        if (Objects.isNull(reservation)) {
+        MassReservation massReservation = user.getMassReservation(request.getMassDate(), request.getMassTime());
+        if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
-        return new ReservationResponse(reservation);
+        return new ReservationResponse(massReservation);
     }
 
     @Override
@@ -115,23 +113,83 @@ public class ReservationServiceImpl implements ReservationService {
 
         Optional<Mass> optionalMass = massRepository.findByDateAndTime(request.getMassDate(), request.getMassTime());
 
-        Mass mass = optionalMass.orElseThrow(() -> new MassNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
+        Mass mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
 
         if (!mass.isEnabled()) {
-            throw new MassNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
+            throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
         }
 
         if (!mass.haveSeats()) {
-            throw new MassHaveNoSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
+            throw new NoAvaialableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
         }
         return mass;
+    }
+
+    @Override
+    public ReservationResponse reserve(EveningReservationRequest request) {
+        List<User> users = userRepository.findByNationalIdOrName(request.getNationalId(), request.getName());
+
+        User user = null;
+
+        if (users.isEmpty())
+            user = createUser(request);
+
+        else if (users.size() == 1)
+            user = users.get(0);
+
+        else
+            throw new RuntimeException("برجاء التأكد من الاسم والرقم القومي");
+
+        Optional<Evening> eveningOptional = eveningRepository.findById(request.getEveningId());
+
+        Evening evening = eveningOptional.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد سهرة لهذا اليوم"));
+
+        if (!evening.isEnabled()) {
+            throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذه السهرة");
+        }
+
+        if (!evening.haveSeats()) {
+            throw new NoAvaialableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للسهرة");
+        }
+
+        user.getEveningReservations()
+                .stream()
+                .filter(er -> er.isActive() && er.getEvening().equals(evening))
+                .findFirst()
+                .ifPresent(a -> {
+                    throw new RuntimeException("عفوا لقد قمت بحجز هذه السهرة من قبل");
+                });
+
+        user.setName(request.getName());
+
+        user.setBirthdate(DateUtil.getBirthDate(request.getNationalId()));
+
+        user.setAge(DateUtil.calculateAge(user.getBirthdate()));
+
+        evening.reserveSeat();
+
+        userRepository.save(user);
+
+        EveningReservation reservation = new EveningReservation(user, evening);
+
+        reservation = eveningReservationRepository.save(reservation);
+
+        return new ReservationResponse(reservation);
+    }
+
+    private User createUser(EveningReservationRequest request) {
+        User user = new User();
+        user.setMobileNumber(request.getMobileNumber());
+        user.setName(request.getName());
+        user.setNationalId(request.getNationalId());
+        return user;
     }
 
     private boolean isExceedMassIntervals(Mass mass, LocalDate massDate) {
         return DAYS.between(mass.getDate(), massDate) >= nextMassAfter;
     }
 
-    private User createUser(ReservationRequest request) {
+    private User createUser(MassReservationRequest request) {
         User user = new User();
         user.setMobileNumber(request.getMobileNumber());
         user.setName(request.getName());

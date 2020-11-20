@@ -3,14 +3,13 @@ package com.stmgalex.reservation.service;
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.Statistics;
 import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.entity.Reservation;
+import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.entity.User;
-import com.stmgalex.reservation.exception.MassNotFoundException;
+import com.stmgalex.reservation.exception.EntityNotFoundException;
 import com.stmgalex.reservation.exception.ReservationNotFoundException;
 import com.stmgalex.reservation.repository.MassRepository;
-import com.stmgalex.reservation.repository.ReservationRepository;
+import com.stmgalex.reservation.repository.MassReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
-import com.stmgalex.reservation.util.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -41,13 +40,13 @@ import static com.stmgalex.reservation.util.NumberUtil.isWithinRange;
 public class AdminServiceImpl implements AdminService {
 
     private final MassRepository massRepository;
-    private final ReservationRepository reservationRepository;
+    private final MassReservationRepository massReservationRepository;
     private final UserRepository userRepository;
 
     @Override
     public Statistics getStatistics() {
         List<Mass> masses = massRepository.findAll();
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<MassReservation> massReservations = massReservationRepository.findAll();
         List<User> users = userRepository.findAll();
 
         int totalAttendants = masses.stream()
@@ -64,9 +63,9 @@ public class AdminServiceImpl implements AdminService {
         return Statistics.builder()
                 .masses(masses.size())
                 .users(users.size())
-                .reservations(reservations.size())
-                .approvedReservations(reservations.stream().filter(Reservation::isActive).count())
-                .canceledReservations(reservations.stream().filter(r -> !r.isActive()).count())
+                .reservations(massReservations.size())
+                .approvedReservations(massReservations.stream().filter(MassReservation::isActive).count())
+                .canceledReservations(massReservations.stream().filter(r -> !r.isActive()).count())
                 .completedMasses(masses.stream().filter(m -> !m.haveSeats()).count())
                 .attendancePercentage(totalAttendants * 1.0 / totalAvailable * 100d)
                 .leesThan10(getUsersAtAge(users, user -> isWithinRange(1, 10, user.getAge())))
@@ -92,7 +91,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void closeMass(int id) {
         Optional<Mass> optionalMass = massRepository.findById(id);
-        Mass mass = optionalMass.orElseThrow(() -> new MassNotFoundException("عفوا لا توجد قداسات"));
+        Mass mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد قداسات"));
         mass.setEnabled(false);
     }
 
@@ -100,7 +99,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void openMass(int id) {
         Optional<Mass> optionalMass = massRepository.findById(id);
-        Mass mass = optionalMass.orElseThrow(() -> new MassNotFoundException("عفوا لا توجد قداسات"));
+        Mass mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد قداسات"));
         mass.setEnabled(true);
     }
 
@@ -130,24 +129,24 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<Reservation> getReservations(PageRequest pageRequest) {
-        return reservationRepository.findAll(pageRequest);
+    public Page<MassReservation> getReservations(PageRequest pageRequest) {
+        return massReservationRepository.findAll(pageRequest);
     }
 
     @Transactional
     @Override
     public void closeReservation(int id) {
-        Optional<Reservation> optional = reservationRepository.findById(id);
-        Reservation reservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
-        reservation.setActive(false);
+        Optional<MassReservation> optional = massReservationRepository.findById(id);
+        MassReservation massReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
+        massReservation.setActive(false);
     }
 
     @Transactional
     @Override
     public void openReservation(int id) {
-        Optional<Reservation> optional = reservationRepository.findById(id);
-        Reservation reservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
-        reservation.setActive(true);
+        Optional<MassReservation> optional = massReservationRepository.findById(id);
+        MassReservation massReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
+        massReservation.setActive(true);
     }
 
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {
@@ -201,22 +200,22 @@ public class AdminServiceImpl implements AdminService {
         style.setVerticalAlignment(VerticalAlignment.CENTER);
         style.setAlignment(HorizontalAlignment.CENTER);
         Optional<Mass> optionalMass = massRepository.findById(id);
-        Mass mass = optionalMass.orElseThrow(() -> new MassNotFoundException("عفوا لا توجد قداسات"));
-        List<Reservation> reservations = mass.getReservations()
+        Mass mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد قداسات"));
+        List<MassReservation> massReservations = mass.getMassReservations()
                 .stream()
-                .filter(Reservation::isActive)
+                .filter(MassReservation::isActive)
                 .sorted(Comparator.comparing(o -> o.getUser().getName()))
                 .collect(Collectors.toList());
 
         int i = 0;
-        for (Reservation reservation : reservations) {
+        for (MassReservation massReservation : massReservations) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
             createCell(sheet, row, columnCount++, i + 1, style);
-            createCell(sheet, row, columnCount++, reservation.getUser().getName(), style);
-            createCell(sheet, row, columnCount++, reservation.getUser().getNationalId(), style);
-            createCell(sheet, row, columnCount++, reservation.getMass().getDate(), style);
-            createCell(sheet, row, columnCount++, reservation.getMass().getTime(), style);
+            createCell(sheet, row, columnCount++, massReservation.getUser().getName(), style);
+            createCell(sheet, row, columnCount++, massReservation.getUser().getNationalId(), style);
+            createCell(sheet, row, columnCount++, massReservation.getMass().getDate(), style);
+            createCell(sheet, row, columnCount++, massReservation.getMass().getTime(), style);
             i++;
         }
     }

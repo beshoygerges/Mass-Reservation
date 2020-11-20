@@ -3,7 +3,7 @@ package com.stmgalex.reservation.service;
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.Statistics;
 import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.entity.Reservation;
+import com.stmgalex.reservation.entity.MassReservation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ public interface AdminService {
 
     void updateMass(MassDto massDto);
 
-    Page<Reservation> getReservations(PageRequest pageRequest);
+    Page<MassReservation> getReservations(PageRequest pageRequest);
 
     void closeReservation(int id);
 

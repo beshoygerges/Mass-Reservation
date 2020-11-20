@@ -62,7 +62,7 @@ $('#seatsDate').change(function () {
 $(document).ready(function () {
     $("#reservationForm").submit(function (event) {
         event.preventDefault();
-        createReservation();
+        reserveMass();
     });
 
     $("#cancelReservationForm").submit(function (event) {
@@ -79,10 +79,15 @@ $(document).ready(function () {
         event.preventDefault();
         getAvailableSeats();
     });
+
+    $("#eveningReservationForm").submit(function (event) {
+        event.preventDefault();
+        reserveEvening();
+    });
 });
 
 
-function createReservation() {
+function reserveMass() {
 
     $("#response").text('');
 
@@ -98,7 +103,7 @@ function createReservation() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/reservations",
+        url: "/reservations/masses",
         data: JSON.stringify(request),
         dataType: 'json',
         cache: false,
@@ -141,7 +146,7 @@ function cancelReservation() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/reservations/delete",
+        url: "/reservations/masses/delete",
         data: JSON.stringify(request),
         dataType: 'json',
         cache: false,
@@ -188,7 +193,7 @@ function searchReservation() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/reservations/search",
+        url: "/reservations/masses/search",
         data: JSON.stringify(request),
         dataType: 'json',
         cache: false,
@@ -230,7 +235,7 @@ function getAvailableSeats() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/reservations/seats",
+        url: "/reservations/masses/seats",
         data: JSON.stringify(request),
         dataType: 'json',
         cache: false,
@@ -247,6 +252,49 @@ function getAvailableSeats() {
             $("#seatsBtn").prop("disabled", false);
         }
     });
+}
+
+function reserveEvening() {
+
+    $("#eveningResponse").text('');
+
+    var request = {}
+
+    request["name"] = $("#eveningName").val();
+    request["mobileNumber"] = $("#eveningPhone").val();
+    request["nationalId"] = $("#eveningNationalId").val();
+    request["eveningId"] = parseInt($("#eveningId").val());
+
+
+    $("#eveningReserveBtn").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/reservations/evenings",
+        data: JSON.stringify(request),
+        dataType: 'json',
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            var details = JSON.parse(JSON.stringify(data));
+            $('#myModal5').modal('toggle');
+            $('#successModal').modal('show');
+            $('#reservationDetails').html(
+                '<strong>الاسم        :   ' + details.name + '</strong><br>' +
+                '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
+                '<strong>تاريخ السهرة:   ' + details.eveningDate + '</strong><br>' +
+                '<strong>حالة الحجز  :   تم التاكيد</strong>'
+            )
+        },
+        error: function (e) {
+            var res = JSON.parse(e.responseText)
+            console.log("ERROR : ", res);
+            $("#eveningResponse").text(res.message);
+            $("#eveningReserveBtn").prop("disabled", false);
+        }
+    });
+
 }
 
 $('#myModal').on('hidden.bs.modal', function () {
@@ -279,4 +327,10 @@ $('#myModal4').on('hidden.bs.modal', function () {
     $('#seatsForm').trigger("reset");
     seatsDate.value = currentDate.toISOString().split("T")[0];
     updateTimes(currentDate.getDay(), 'seatsTimes')
+});
+
+$('#myModal5').on('hidden.bs.modal', function () {
+    $("#eveningReserveBtn").prop("disabled", false);
+    $("#eveningResponse").text('');
+    $('#eveningReservationForm').trigger("reset");
 });

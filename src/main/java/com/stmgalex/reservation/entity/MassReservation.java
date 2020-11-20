@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "[Reservation]")
-public class Reservation implements Serializable {
+public class MassReservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,7 +40,7 @@ public class Reservation implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Reservation(User user, Mass mass) {
+    public MassReservation(User user, Mass mass) {
         this.user = user;
         this.mass = mass;
     }

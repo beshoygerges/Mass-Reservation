@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.stmgalex</groupId>
-    <artifactId>mass-reservation</artifactId>
+    <artifactId>mass-massReservation</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mass-reservation</name>
+    <name>mass-massReservation</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

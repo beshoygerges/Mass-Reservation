@@ -51,28 +51,34 @@ public class User implements Serializable {
     @ToString.Exclude
     @OrderBy("id desc")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reservation> reservations = new ArrayList<>();
+    private List<MassReservation> massReservations = new ArrayList<>();
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OrderBy("id desc")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EveningReservation> eveningReservations = new ArrayList<>();
 
 
     @Transient
     public Mass getLastActiveMass() {
-        Reservation reservation = getLastActiveReservation();
-        if (Objects.nonNull(reservation))
-            return reservation.getMass();
+        MassReservation massReservation = getLastActiveMassReservation();
+        if (Objects.nonNull(massReservation))
+            return massReservation.getMass();
         return null;
     }
 
     @Transient
-    public Reservation getLastActiveReservation() {
-        return reservations.stream()
-                .filter(Reservation::isActive)
+    public MassReservation getLastActiveMassReservation() {
+        return massReservations.stream()
+                .filter(MassReservation::isActive)
                 .findFirst()
                 .orElse(null);
     }
 
     @Transient
-    public Reservation getReservation(LocalDate massDate, LocalTime massTime) {
-        return reservations.stream()
+    public MassReservation getMassReservation(LocalDate massDate, LocalTime massTime) {
+        return massReservations.stream()
                 .filter(r -> r.isActive() &&
                         r.getMass().getDate().equals(massDate) &&
                         r.getMass().getTime().equals(massTime) &&

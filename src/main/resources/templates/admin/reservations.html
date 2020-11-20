@@ -52,39 +52,39 @@
                                 </thead>
 
                                 <tbody>
-                                <tr th:each="reservation,iter : ${reservations}" style="color: white;"
+                                <tr th:each="massReservation,iter : ${massReservations}" style="color: white;"
                                     class="text-center">
-                                    <td th:text="${reservation.id}"></td>
-                                    <td th:text="${reservation.user.name}"></td>
-                                    <td th:text="${reservation.user.nationalId}"></td>
-                                    <td th:text="${reservation.user.mobileNumber}"></td>
-                                    <td th:text="${reservation.mass.day}"></td>
-                                    <td th:text="${reservation.mass.date}"></td>
-                                    <td th:text="${reservation.mass.time}"></td>
+                                    <td th:text="${massReservation.id}"></td>
+                                    <td th:text="${massReservation.user.name}"></td>
+                                    <td th:text="${massReservation.user.nationalId}"></td>
+                                    <td th:text="${massReservation.user.mobileNumber}"></td>
+                                    <td th:text="${massReservation.mass.day}"></td>
+                                    <td th:text="${massReservation.mass.date}"></td>
+                                    <td th:text="${massReservation.mass.time}"></td>
 
-                                    <div th:if="${reservation.active}">
+                                    <div th:if="${massReservation.active}">
                                         <td><i class="fas fa-lock-open"></i></td>
                                     </div>
 
-                                    <div th:if="${!reservation.active}">
+                                    <div th:if="${!massReservation.active}">
                                         <td style="color: red"><i class="fas fa-lock"></i></td>
                                     </div>
 
                                     <td>
                                         <div class="row">
 
-                                            <div th:if="${reservation.active}">
+                                            <div th:if="${massReservation.active}">
                                                 <div class="col-lg-6">
-                                                    <a th:href="@{/admin/reservations/close/{id}(id=${reservation.id})}"
+                                                    <a th:href="@{/admin/massReservations/close/{id}(id=${massReservation.id})}"
                                                        class="btn btn-outline-danger " role="button"
                                                        style="width: 60px">
                                                         <i class="fas fa-lock"></i></a>
                                                 </div>
                                             </div>
 
-                                            <div th:if="${!reservation.active}">
+                                            <div th:if="${!massReservation.active}">
                                                 <div class="col-lg-6">
-                                                    <a th:href="@{/admin/reservations/open/{id}(id=${reservation.id})}"
+                                                    <a th:href="@{/admin/massReservations/open/{id}(id=${massReservation.id})}"
                                                        class="btn btn-outline-warning" role="button"
                                                        style="width: 60px">
                                                         <i class="fas fa-lock-open"></i>
@@ -101,18 +101,18 @@
                             <div class="pagination-div text-center">
 
                                 <span th:if="${page.hasPrevious()}">
-                                    <a th:href="@{/admin/reservations(page=${page.number-1},size=${page.size})}">السابق</a>
+                                    <a th:href="@{/admin/massReservations(page=${page.number-1},size=${page.size})}">السابق</a>
                                 </span>
 
                                 <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
                                     <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
                                     <span th:unless="${page.number == i}">
-                                         <a th:href="@{/admin/reservations(page=${i},size=${page.size})}">[[${i}+1]]</a>
+                                         <a th:href="@{/admin/massReservations(page=${i},size=${page.size})}">[[${i}+1]]</a>
                                     </span>
                                 </th:block>
 
                                 <span th:if="${page.hasNext()}">
-                                    <a th:href="@{/admin/reservations(page=${page.number+1},size=${page.size})}">التالي</a>
+                                    <a th:href="@{/admin/massReservations(page=${page.number+1},size=${page.size})}">التالي</a>
                                 </span>
                             </div>
                         </div>

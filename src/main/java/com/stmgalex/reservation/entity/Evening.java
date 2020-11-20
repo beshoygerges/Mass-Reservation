@@ -11,14 +11,13 @@ import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "[Mass]")
-public class Mass implements Serializable {
+@Table(name = "[Evening]")
+public class Evening implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +25,6 @@ public class Mass implements Serializable {
 
     @Column(nullable = false)
     private LocalDate date;
-
-    @Column(nullable = false)
-    private LocalTime time;
 
     @Column(nullable = false, columnDefinition = "int default 100")
     private int totalSeats = 100;
@@ -49,8 +45,8 @@ public class Mass implements Serializable {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "mass")
-    private List<MassReservation> massReservations = new ArrayList<>();
+    @OneToMany(mappedBy = "evening")
+    private List<EveningReservation> eveningReservations = new ArrayList<>();
 
     public boolean haveSeats() {
         return totalSeats - reservedSeats > 0;

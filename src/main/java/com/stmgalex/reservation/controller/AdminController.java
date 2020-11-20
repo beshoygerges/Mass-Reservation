@@ -3,7 +3,7 @@ package com.stmgalex.reservation.controller;
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.ReservationDto;
 import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.entity.Reservation;
+import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.service.AdminService;
 import com.stmgalex.reservation.util.MapperUtil;
 import lombok.AllArgsConstructor;
@@ -95,7 +95,7 @@ public class AdminController {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
 
-        Page<Reservation> page = adminService.getReservations(pageRequest);
+        Page<MassReservation> page = adminService.getReservations(pageRequest);
 
         model.addAttribute("reservations", page.getContent()
                 .stream()
