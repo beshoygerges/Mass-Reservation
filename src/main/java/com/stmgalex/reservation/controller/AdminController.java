@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -61,15 +62,17 @@ public class AdminController {
     }
 
     @GetMapping("/masses/close/{id}")
-    public String closeMass(@PathVariable int id) {
+    public String closeMass(@PathVariable int id, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         adminService.closeMass(id);
-        return "redirect:/admin/masses";
+        return "redirect:" + referer;
     }
 
     @GetMapping("/masses/open/{id}")
-    public String openMass(@PathVariable int id) {
+    public String openMass(@PathVariable int id, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         adminService.openMass(id);
-        return "redirect:/admin/masses";
+        return "redirect:" + referer;
     }
 
     @GetMapping("/masses/{id}/reservations")
@@ -82,9 +85,10 @@ public class AdminController {
     }
 
     @PostMapping("/masses")
-    public String updateMass(@Valid @ModelAttribute("mass") MassDto mass) {
+    public String updateMass(@Valid @ModelAttribute("mass") MassDto mass, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         adminService.updateMass(mass);
-        return "redirect:/admin/masses";
+        return "redirect:" + referer;
     }
 
     @GetMapping({"/masses/reservations"})
@@ -109,14 +113,16 @@ public class AdminController {
     }
 
     @GetMapping("/masses/reservations/{id}/close")
-    public String closeReservation(@PathVariable int id) {
+    public String closeReservation(@PathVariable int id, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         adminService.closeReservation(id);
-        return "redirect:/admin/masses/reservations";
+        return "redirect:" + referer;
     }
 
     @GetMapping("/masses/reservations/{id}/open")
-    public String openReservation(@PathVariable int id) {
+    public String openReservation(@PathVariable int id, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         adminService.openReservation(id);
-        return "redirect:/admin/masses/reservations";
+        return "redirect:" + referer;
     }
 }
