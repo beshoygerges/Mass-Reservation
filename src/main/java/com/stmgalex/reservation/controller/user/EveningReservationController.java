@@ -1,4 +1,4 @@
-package com.stmgalex.reservation.controller;
+package com.stmgalex.reservation.controller.user;
 
 import com.stmgalex.reservation.dto.*;
 import com.stmgalex.reservation.entity.Mass;

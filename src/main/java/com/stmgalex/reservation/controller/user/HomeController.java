@@ -1,4 +1,4 @@
-package com.stmgalex.reservation.controller;
+package com.stmgalex.reservation.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

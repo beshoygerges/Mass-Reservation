@@ -2,6 +2,8 @@ package com.stmgalex.reservation.service;
 
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.Statistics;
+import com.stmgalex.reservation.entity.Evening;
+import com.stmgalex.reservation.entity.EveningReservation;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
 import org.springframework.data.domain.Page;
@@ -16,19 +18,31 @@ public interface AdminService {
 
     Statistics getStatistics();
 
-    Page<Mass> getMasses(Pageable pageRequest, LocalDate date);
+    Page<Mass> getMasses(Pageable pageable, LocalDate date);
 
-    void closeMass(int id);
+    Page<Evening> getEvenings(Pageable pageable);
 
-    void openMass(int id);
+    void disableMass(int id);
+
+    void enableMass(int id);
+
+    void disableEvening(int id);
+
+    void enableEvening(int id);
 
     void exportMassReservations(int id, HttpServletResponse response) throws IOException;
 
     void updateMass(MassDto massDto);
 
-    Page<MassReservation> getReservations(PageRequest pageRequest);
+    Page<MassReservation> getMassReservations(Pageable pageable);
 
-    void closeReservation(int id);
+    Page<EveningReservation> getEveningReservations(Pageable pageable);
 
-    void openReservation(int id);
+    void disableMassReservation(int id);
+
+    void enableMassReservation(int id);
+
+    void disableEveningReservation(int id);
+
+    void enableEveningReservation(int id);
 }

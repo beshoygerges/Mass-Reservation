@@ -2,14 +2,10 @@ package com.stmgalex.reservation.service;
 
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.Statistics;
-import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.entity.MassReservation;
-import com.stmgalex.reservation.entity.User;
+import com.stmgalex.reservation.entity.*;
 import com.stmgalex.reservation.exception.EntityNotFoundException;
 import com.stmgalex.reservation.exception.ReservationNotFoundException;
-import com.stmgalex.reservation.repository.MassRepository;
-import com.stmgalex.reservation.repository.MassReservationRepository;
-import com.stmgalex.reservation.repository.UserRepository;
+import com.stmgalex.reservation.repository.*;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -42,6 +38,8 @@ public class AdminServiceImpl implements AdminService {
     private final MassRepository massRepository;
     private final MassReservationRepository massReservationRepository;
     private final UserRepository userRepository;
+    private final EveningRepository eveningRepository;
+    private final EveningReservationRepository eveningReservationRepository;
 
     @Override
     public Statistics getStatistics() {
@@ -87,9 +85,14 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
+    @Override
+    public Page<Evening> getEvenings(Pageable pageable) {
+        return eveningRepository.findAll(pageable);
+    }
+
     @Transactional
     @Override
-    public void closeMass(int id) {
+    public void disableMass(int id) {
         Optional<Mass> optionalMass = massRepository.findById(id);
         Mass mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد قداسات"));
         mass.setEnabled(false);
@@ -97,10 +100,26 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void openMass(int id) {
+    public void enableMass(int id) {
         Optional<Mass> optionalMass = massRepository.findById(id);
         Mass mass = optionalMass.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد قداسات"));
         mass.setEnabled(true);
+    }
+
+    @Transactional
+    @Override
+    public void disableEvening(int id) {
+        Optional<Evening> eveningOptional = eveningRepository.findById(id);
+        Evening evening = eveningOptional.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد سهرات"));
+        evening.setEnabled(false);
+    }
+
+    @Transactional
+    @Override
+    public void enableEvening(int id) {
+        Optional<Evening> eveningOptional = eveningRepository.findById(id);
+        Evening evening = eveningOptional.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد سهرات"));
+        evening.setEnabled(true);
     }
 
     @Override
@@ -129,13 +148,18 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<MassReservation> getReservations(PageRequest pageRequest) {
-        return massReservationRepository.findAll(pageRequest);
+    public Page<MassReservation> getMassReservations(Pageable pageable) {
+        return massReservationRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<EveningReservation> getEveningReservations(Pageable pageable) {
+        return eveningReservationRepository.findAll(pageable);
     }
 
     @Transactional
     @Override
-    public void closeReservation(int id) {
+    public void disableMassReservation(int id) {
         Optional<MassReservation> optional = massReservationRepository.findById(id);
         MassReservation massReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
         massReservation.setActive(false);
@@ -143,10 +167,26 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void openReservation(int id) {
+    public void enableMassReservation(int id) {
         Optional<MassReservation> optional = massReservationRepository.findById(id);
         MassReservation massReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
         massReservation.setActive(true);
+    }
+
+    @Transactional
+    @Override
+    public void disableEveningReservation(int id) {
+        Optional<EveningReservation> optional = eveningReservationRepository.findById(id);
+        EveningReservation eveningReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
+        eveningReservation.setActive(false);
+    }
+
+    @Transactional
+    @Override
+    public void enableEveningReservation(int id) {
+        Optional<EveningReservation> optional = eveningReservationRepository.findById(id);
+        EveningReservation eveningReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
+        eveningReservation.setActive(true);
     }
 
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {

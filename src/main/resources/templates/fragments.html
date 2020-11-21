@@ -32,13 +32,20 @@
         </div>
     </div>
     <ul class="list-unstyled">
-        <li th:classappend="${content == 1}?active"><a th:href="@{/admin}"> <i class="fas fa-home"></i>الرئيسية </a>
+        <li th:classappend="${content == 1}?active">
+            <a th:href="@{/admin}"> <i class="fas fa-home"></i>الرئيسية </a>
         </li>
-        <li th:classappend="${content == 2}?active"><a th:href="@{/admin/masses}"> <i class="fas fa-praying-hands"></i>القداسات</a>
+        <li th:classappend="${content == 2}?active">
+            <a th:href="@{/admin/masses}"> <i class="fas fa-praying-hands"></i>القداسات</a>
         </li>
-        <li th:classappend="${content == 3}?active"><a th:href="@{/admin/masses/reservations}"><i class="far fa-address-book"></i>حجوزات القداسات</a>
+        <li th:classappend="${content == 3}?active">
+            <a th:href="@{/admin/masses/reservations}"><i class="far fa-address-book"></i>حجوزات القداسات</a>
         </li>
-        <li th:classappend="${content == 4}?active"><a th:href="@{/admin/users}"> <i class="fas fa-user"></i>المستخدمين</a>
+        <li th:classappend="${content == 4}?active">
+            <a th:href="@{/admin/evenings}"> <i class="fas fa-praying-hands"></i>السهرات</a>
+
+        <li th:classappend="${content == 5}?active">
+            <a th:href="@{/admin/evenings/reservations}"> <i class="fas fa-address-book"></i>حجوزات السهرات</a>
         </li>
     </ul>
 </nav>
