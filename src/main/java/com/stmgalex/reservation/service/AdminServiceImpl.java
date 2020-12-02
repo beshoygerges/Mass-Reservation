@@ -123,7 +123,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void exportMassReservations(int id, HttpServletResponse response) throws IOException {
+    public void exportMassUsers(int id, HttpServletResponse response) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
 
         XSSFSheet sheet = workbook.createSheet("Users");
@@ -187,6 +187,76 @@ public class AdminServiceImpl implements AdminService {
         Optional<EveningReservation> optional = eveningReservationRepository.findById(id);
         EveningReservation eveningReservation = optional.orElseThrow(() -> new ReservationNotFoundException("عفوا هذا الحجز غير موجود"));
         eveningReservation.setActive(true);
+    }
+
+    @Override
+    public void exportEveningUsers(int id, HttpServletResponse response) throws IOException {
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("Users");
+
+        writeHeaderLine2(workbook, sheet);
+
+        writeDataLines2(workbook, sheet, id);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+
+        workbook.write(outputStream);
+
+        workbook.close();
+
+        outputStream.close();
+
+    }
+
+    private void writeDataLines2(XSSFWorkbook workbook, XSSFSheet sheet, int id) {
+        int rowCount = 1;
+
+        CellStyle style = workbook.createCellStyle();
+        XSSFFont font = workbook.createFont();
+        font.setFontHeight(12);
+        style.setFont(font);
+        style.setWrapText(true);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        Optional<Evening> optionalEvening = eveningRepository.findById(id);
+
+        Evening evening = optionalEvening.orElseThrow(() -> new EntityNotFoundException("عفوا لا توجد سهرات"));
+
+        List<EveningReservation> eveningReservations = evening.getEveningReservations()
+                .stream()
+                .filter(EveningReservation::isActive)
+                .sorted(Comparator.comparing(o -> o.getUser().getName()))
+                .collect(Collectors.toList());
+
+        int i = 0;
+        for (EveningReservation eveningReservation : eveningReservations) {
+            Row row = sheet.createRow(rowCount++);
+            int columnCount = 0;
+            createCell(sheet, row, columnCount++, i + 1, style);
+            createCell(sheet, row, columnCount++, eveningReservation.getUser().getName(), style);
+            createCell(sheet, row, columnCount++, eveningReservation.getUser().getNationalId(), style);
+            createCell(sheet, row, columnCount++, eveningReservation.getEvening().getDate(), style);
+            i++;
+        }
+    }
+
+    private void writeHeaderLine2(XSSFWorkbook workbook, XSSFSheet sheet) {
+        Row row = sheet.createRow(0);
+
+        CellStyle style = workbook.createCellStyle();
+        XSSFFont font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeight(10);
+        style.setFont(font);
+        style.setWrapText(true);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        createCell(sheet, row, 0, "رقم الحجز", style);
+        createCell(sheet, row, 1, "الاسم", style);
+        createCell(sheet, row, 2, "الرقم القومي", style);
+        createCell(sheet, row, 3, "اليوم", style);
     }
 
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {

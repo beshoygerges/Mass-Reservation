@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -62,6 +64,14 @@ public class EveningController {
         String referer = request.getHeader("Referer");
         adminService.enableEvening(id);
         return "redirect:" + referer;
+    }
+    @GetMapping("/{id}/reservations")
+    public void exportMassUsers(@PathVariable int id, HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users.xlsx";
+        response.setHeader(headerKey, headerValue);
+        adminService.exportEveningUsers(id, response);
     }
 
 }

@@ -7,7 +7,6 @@ import com.stmgalex.reservation.entity.EveningReservation;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +29,7 @@ public interface AdminService {
 
     void enableEvening(int id);
 
-    void exportMassReservations(int id, HttpServletResponse response) throws IOException;
+    void exportMassUsers(int id, HttpServletResponse response) throws IOException;
 
     void updateMass(MassDto massDto);
 
@@ -45,4 +44,6 @@ public interface AdminService {
     void disableEveningReservation(int id);
 
     void enableEveningReservation(int id);
+
+    void exportEveningUsers(int id, HttpServletResponse response) throws IOException;
 }

@@ -80,7 +80,7 @@ public class MassController {
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=users.xlsx";
         response.setHeader(headerKey, headerValue);
-        adminService.exportMassReservations(id, response);
+        adminService.exportMassUsers(id, response);
     }
 
 }
