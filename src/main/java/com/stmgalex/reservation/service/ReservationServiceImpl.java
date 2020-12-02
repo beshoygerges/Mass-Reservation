@@ -164,16 +164,17 @@ public class ReservationServiceImpl implements ReservationService {
                     throw new RuntimeException("عفوا لقد قمت بحجز هذه السهرة من قبل");
                 });
 
-        user.getEveningReservations()
-                .stream()
-                .filter(EveningReservation::isActive)
-                .sorted(ReservationServiceImpl::compareByEveningDate)
-                .map(EveningReservation::getEvening)
-                .filter(lastEvening -> !isValidPeriod(evening, lastEvening))
-                .findFirst()
-                .ifPresent(lastEvening -> {
-                    throw new RuntimeException("عفوا يجب ان تكون الفترة بين كل سهرة والاخري مدة لا تقل عن 10 ايام");
-                });
+        if (!evening.getDate().equals(LocalDate.of(2020, 12, 31)))
+            user.getEveningReservations()
+                    .stream()
+                    .filter(EveningReservation::isActive)
+                    .sorted(ReservationServiceImpl::compareByEveningDate)
+                    .map(EveningReservation::getEvening)
+                    .filter(lastEvening -> !isValidPeriod(evening, lastEvening))
+                    .findFirst()
+                    .ifPresent(lastEvening -> {
+                        throw new RuntimeException("عفوا يجب ان تكون الفترة بين كل سهرة والاخري مدة لا تقل عن 10 ايام");
+                    });
 
 
         user.setName(request.getName());
