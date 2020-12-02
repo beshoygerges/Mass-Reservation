@@ -15,4 +15,6 @@ public interface ReservationService {
     Mass getAvailableSeats(AvailableSeatsRequest request);
 
     ReservationResponse reserve(EveningReservationRequest request);
+
+    ReservationResponse cancelReservation(EveningReservationDisableRequest request);
 }

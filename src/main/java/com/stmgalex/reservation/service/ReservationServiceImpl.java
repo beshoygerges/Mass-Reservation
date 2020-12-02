@@ -193,6 +193,26 @@ public class ReservationServiceImpl implements ReservationService {
         return new ReservationResponse(reservation);
     }
 
+    @Transactional
+    @Override
+    public ReservationResponse cancelReservation(EveningReservationDisableRequest request) {
+        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
+
+        User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+
+        EveningReservation eveningReservation = user.getEveningReservations()
+                .stream()
+                .filter(e -> e.getEvening().getId() == request.getEveningId())
+                .findFirst()
+                .orElseThrow(() -> new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان"));
+
+        eveningReservation.setActive(false);
+
+        eveningReservation.getEvening().releaseSeat();
+
+        return new ReservationResponse(eveningReservation);
+    }
+
     private boolean isValidPeriod(Evening evening, Evening lastEvening) {
         long days = DAYS.between(evening.getDate(), lastEvening.getDate());
         return days >= reservationPeriod || days <= -1 * reservationPeriod;

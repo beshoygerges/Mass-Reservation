@@ -84,6 +84,11 @@ $(document).ready(function () {
         event.preventDefault();
         reserveEvening();
     });
+
+    $("#eveningCancelReservationForm").submit(function (event) {
+        event.preventDefault();
+        cancelEveningReservation();
+    });
 });
 
 
@@ -297,6 +302,46 @@ function reserveEvening() {
 
 }
 
+function cancelEveningReservation() {
+
+    $("#eveningResponse").text('');
+
+    var request = {}
+
+    request["nationalId"] = $("#eveningCancelNationalId").val();
+    request["eveningId"] = parseInt($("#eveningCancelId").val());
+
+
+    $("#eveningCancelReserveBtn").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/reservations/evenings/disable",
+        data: JSON.stringify(request),
+        dataType: 'json',
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            var details = JSON.parse(JSON.stringify(data));
+            $('#myModal6').modal('toggle');
+            $('#successModal').modal('show');
+            $('#reservationDetails').html(
+                '<strong>الاسم        :   ' + details.name + '</strong><br>' +
+                '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
+                '<strong>تاريخ السهرة:   ' + details.eveningDate + '</strong><br>' +
+                '<strong>حالة الحجز  :   تم الالغاء</strong>'
+            )
+        },
+        error: function (e) {
+            var res = JSON.parse(e.responseText)
+            $("#eveningCancelResponse").text(res.message);
+            $("#eveningCancelReserveBtn").prop("disabled", false);
+        }
+    });
+
+}
+
 $('#myModal').on('hidden.bs.modal', function () {
     $("#reserveBtn").prop("disabled", false);
     $("#response").text('');
@@ -333,4 +378,10 @@ $('#myModal5').on('hidden.bs.modal', function () {
     $("#eveningReserveBtn").prop("disabled", false);
     $("#eveningResponse").text('');
     $('#eveningReservationForm').trigger("reset");
+});
+
+$('#myModal6').on('hidden.bs.modal', function () {
+    $("#eveningCancelReserveBtn").prop("disabled", false);
+    $("#eveningCancelResponse").text('');
+    $('#eveningCancelReservationForm').trigger("reset");
 });

@@ -32,8 +32,8 @@ public class EveningReservationController {
         return ResponseEntity.ok(reservationService.searchReservation(request));
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity cancelReservation(@Valid @RequestBody CancelReservationRequest request) {
+    @PostMapping("/disable")
+    public ResponseEntity cancelReservation(@Valid @RequestBody EveningReservationDisableRequest request) {
         return ResponseEntity.ok(reservationService.cancelReservation(request));
     }
 
