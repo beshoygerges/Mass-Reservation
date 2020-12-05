@@ -89,7 +89,53 @@ $(document).ready(function () {
         event.preventDefault();
         cancelEveningReservation();
     });
+
+    $("#addUserForm").submit(function (event) {
+        event.preventDefault();
+        addUser();
+    });
 });
+
+function addUser() {
+    $("#addUserResponse").text('');
+
+    var request = {}
+    request["nationalId"] = $("#addUserNationalId").val();
+    request["name"] = $("#addUserName").val();
+    request["mobileNumber"] = $("#addUserPhone").val();
+
+    $("#addUserBtn").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/users",
+        data: JSON.stringify(request),
+        dataType: 'json',
+        cache: false,
+        timeout: 600000,
+        success: function (data) {
+            var user = JSON.parse(JSON.stringify(data));
+            $('#addUserModal').modal('toggle');
+            $('#successModal').modal('show');
+            $('#header').html('بيانات المستخدم');
+            $('#reservationDetails').html(
+                '<strong>الاسم        :   ' + user.name + '</strong><br>' +
+                '<strong>الرقم القومي   :   ' + user.nationalId + '</strong><br>' +
+                '<strong>الموبايل   :   ' + user.mobileNumber + '</strong><br>' +
+                '<strong>السن:   ' + user.age + '</strong><br>' +
+                '<strong>تاريخ الميلاد  :   ' + user.birthdate + '</strong><br>'
+            )
+        },
+        error: function (e) {
+            console.log(e);
+            var res = JSON.parse(e.responseText)
+            console.log(res);
+            $("#addUserResponse").text(res.message);
+            $("#addUserBtn").prop("disabled", false);
+        }
+    });
+}
 
 
 function reserveMass() {
@@ -97,8 +143,6 @@ function reserveMass() {
     $("#response").text('');
 
     var request = {}
-    request["name"] = $("#name").val();
-    request["mobileNumber"] = $("#phone").val();
     request["nationalId"] = $("#nationalId").val();
     request["massTime"] = $("#reservationTimes").val();
     request["massDate"] = $("#reservationDate").val();
@@ -117,6 +161,7 @@ function reserveMass() {
             var details = JSON.parse(JSON.stringify(data));
             $('#myModal').modal('toggle');
             $('#successModal').modal('show');
+            $('#header').html('بيانات الحجز');
             $('#reservationDetails').html(
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
@@ -265,8 +310,6 @@ function reserveEvening() {
 
     var request = {}
 
-    request["name"] = $("#eveningName").val();
-    request["mobileNumber"] = $("#eveningPhone").val();
     request["nationalId"] = $("#eveningNationalId").val();
     request["eveningId"] = parseInt($("#eveningId").val());
 
@@ -285,6 +328,7 @@ function reserveEvening() {
             var details = JSON.parse(JSON.stringify(data));
             $('#myModal5').modal('toggle');
             $('#successModal').modal('show');
+            $('#header').html('بيانات الحجز');
             $('#reservationDetails').html(
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
@@ -384,4 +428,10 @@ $('#myModal6').on('hidden.bs.modal', function () {
     $("#eveningCancelReserveBtn").prop("disabled", false);
     $("#eveningCancelResponse").text('');
     $('#eveningCancelReservationForm').trigger("reset");
+});
+
+$('#addUserModal').on('hidden.bs.modal', function () {
+    $("#addUserBtn").prop("disabled", false);
+    $("#addUserResponse").text('');
+    $('#addUserForm').trigger("reset");
 });

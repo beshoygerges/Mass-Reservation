@@ -131,6 +131,19 @@
         <div class="row dark text-center">
 
             <div class="col-12">
+                <h3 class="heading">التسجيل</h3>
+                <div class="heading-underline"></div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="feature">
+                    <i class="fas fa-user-plus fa-3x" data-fa-transform="shrink-3 up-5"
+                       style="color:#1EBBA3" data-toggle="modal" data-target="#addUserModal"></i>
+                </div>
+                <h3>اضافة مستخدم</h3>
+            </div>
+
+            <div class="col-12">
                 <h3 class="heading">حجز القداسات</h3>
                 <div class="heading-underline"></div>
             </div>
@@ -203,6 +216,71 @@
     <div th:insert="fragments :: footer"></div>
 </div>
 
+<!--add User -->
+<!-- Reservation Modal -->
+<div class="modal fade show" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h3 class="modal-title" id="addUserModalLabel">اضافة مستخدم جديد</h3>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="addUserForm" class="horizontal-form" autocomplete="off">
+
+                    <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               id="addUserName"
+                               pattern="^([\u0621-\u064A]{2,}\s){3}([\u0621-\u064A]{2,}\s?)$"
+                               oninvalid="this.setCustomValidity('من فضلك ادخل الاسم رباعي')"
+                               oninput="setCustomValidity('')"
+                               placeholder="الاسم رباعي" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="tel"
+                               class="form-control"
+                               id="addUserPhone"
+                               oninvalid="this.setCustomValidity('من فضلك ادخا رقم الهاتف صحيحا')"
+                               oninput="setCustomValidity('')"
+                               placeholder="رقم الموبايل"
+                               title="من فضلك ادخل رقم هاتف صالحا"
+                               pattern="^(010|011|012|015)[0-9]{8}$" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               id="addUserNationalId"
+                               pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                               oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                               oninput="setCustomValidity('')"
+                               placeholder="الرقم القومي"
+                               required>
+                    </div>
+
+                    <br>
+
+                    <button id="addUserBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+                        تسجيل
+                    </button>
+
+                </form>
+
+                <div class="text-center" style="color: red; margin-top: 1rem">
+                    <strong id="addUserResponse"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Reservation Modal -->
 <div class="modal fade show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -217,26 +295,6 @@
 
                 <form id="reservationForm" class="horizontal-form" autocomplete="off">
 
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="name"
-                               pattern="^([\u0621-\u064A]{2,}\s){3}([\u0621-\u064A]{2,})$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الاسم رباعي')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الاسم رباعي" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="tel"
-                               class="form-control"
-                               id="phone"
-                               oninvalid="this.setCustomValidity('من فضلك ادخا رقم الهاتف صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="رقم الموبايل"
-                               title="من فضلك ادخل رقم هاتف صالحا"
-                               pattern="^(010|011|012|015)[0-9]{8}$" required>
-                    </div>
 
                     <div class="form-group">
                         <input type="text"
@@ -264,7 +322,9 @@
                             style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
                         حجز
                     </button>
+
                 </form>
+
                 <div class="text-center" style="color: red; margin-top: 1rem">
                     <strong id="response"></strong>
                 </div>
@@ -381,7 +441,7 @@
                 <i class="fas fa-check-circle fa-4x" style="color: #1EBBA3"></i>
             </div>
             <div class="modal-body text-center">
-                <h2 style="color: #1EBBA3">بيانات الحجز</h2>
+                <h2 id="header" style="color: #1EBBA3">بيانات الحجز</h2>
                 <div class="heading-underline"></div>
                 <div class="text-right" id="reservationDetails"
                      style="margin-top: 2.3rem;margin-right: 9rem;margin-bottom: 3rem;">
@@ -446,27 +506,6 @@
                     <div class="form-group">
                         <input type="text"
                                class="form-control"
-                               id="eveningName"
-                               pattern="^([\u0621-\u064A]{2,}\s){3}([\u0621-\u064A]{2,})$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الاسم رباعي')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الاسم رباعي" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="tel"
-                               class="form-control"
-                               id="eveningPhone"
-                               oninvalid="this.setCustomValidity('من فضلك ادخا رقم الهاتف صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="رقم الموبايل"
-                               title="من فضلك ادخل رقم هاتف صالحا"
-                               pattern="^(010|011|012|015)[0-9]{8}$" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
                                id="eveningNationalId"
                                pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
                                oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
@@ -474,7 +513,6 @@
                                placeholder="الرقم القومي"
                                required>
                     </div>
-
 
                     <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
                         <select class="form-control" id="eveningId" required>
@@ -490,11 +528,14 @@
                     </div>
 
                     <br>
+
                     <button id="eveningReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
                             style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
                         حجز
                     </button>
+
                 </form>
+
                 <div class="text-center" style="color: red; margin-top: 1rem">
                     <strong id="eveningResponse"></strong>
                 </div>

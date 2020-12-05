@@ -1,17 +1,16 @@
-package com.stmgalex.reservation.service;
+package com.stmgalex.reservation.service.impl;
 
 import com.stmgalex.reservation.dto.*;
 import com.stmgalex.reservation.entity.*;
 import com.stmgalex.reservation.exception.*;
 import com.stmgalex.reservation.repository.*;
-import com.stmgalex.reservation.util.DateUtil;
+import com.stmgalex.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,18 +36,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public synchronized ReservationResponse reserve(final MassReservationRequest request) {
 
-        List<User> users = userRepository.findByNationalIdOrName(request.getNationalId(), request.getName());
+        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
-        User user = null;
 
-        if (users.isEmpty())
-            user = createUser(request);
+        User user = optionalUser.orElseThrow(() -> new RuntimeException("من فضلك قم بالتسجيل اولا"));
 
-        else if (users.size() == 1)
-            user = users.get(0);
-
-        else
-            throw new RuntimeException("برجاء التأكد من الاسم والرقم القومي");
 
         Mass mass = user.getLastActiveMass();
 
@@ -68,15 +60,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new NoAvaialableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
         }
 
-        user.setName(request.getName());
-
-        user.setBirthdate(DateUtil.getBirthDate(request.getNationalId()));
-
-        user.setAge(DateUtil.calculateAge(user.getBirthdate()));
-
         mass.reserveSeat();
-
-        userRepository.save(user);
 
         MassReservation massReservation = new MassReservation(user, mass);
 
@@ -91,8 +75,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationResponse cancelReservation(final CancelReservationRequest request) {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
+
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+
         MassReservation massReservation = user.getMassReservation(request.getMassDate(), request.getMassTime());
+
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
@@ -131,18 +118,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public synchronized ReservationResponse reserve(EveningReservationRequest request) {
-        List<User> users = userRepository.findByNationalIdOrName(request.getNationalId(), request.getName());
 
-        User user = null;
+        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
-        if (users.isEmpty())
-            user = createUser(request);
-
-        else if (users.size() == 1)
-            user = users.get(0);
-
-        else
-            throw new RuntimeException("برجاء التأكد من الاسم والرقم القومي");
+        User user = optionalUser.orElseThrow(() -> new RuntimeException("من فضلك قم بالتسجيل اولا"));
 
         Optional<Evening> eveningOptional = eveningRepository.findById(request.getEveningId());
 
@@ -177,15 +156,7 @@ public class ReservationServiceImpl implements ReservationService {
                     });
 
 
-        user.setName(request.getName());
-
-        user.setBirthdate(DateUtil.getBirthDate(request.getNationalId()));
-
-        user.setAge(DateUtil.calculateAge(user.getBirthdate()));
-
         evening.reserveSeat();
-
-        userRepository.save(user);
 
         EveningReservation reservation = new EveningReservation(user, evening);
 
@@ -219,24 +190,8 @@ public class ReservationServiceImpl implements ReservationService {
         return days >= reservationPeriod || days <= -1 * reservationPeriod;
     }
 
-    private User createUser(EveningReservationRequest request) {
-        User user = new User();
-        user.setMobileNumber(request.getMobileNumber());
-        user.setName(request.getName());
-        user.setNationalId(request.getNationalId());
-        return user;
-    }
-
     private boolean isExceedMassIntervals(Mass mass, LocalDate massDate) {
         long days = DAYS.between(mass.getDate(), massDate);
         return days >= reservationPeriod || days <= -1 * reservationPeriod;
-    }
-
-    private User createUser(MassReservationRequest request) {
-        User user = new User();
-        user.setMobileNumber(request.getMobileNumber());
-        user.setName(request.getName());
-        user.setNationalId(request.getNationalId());
-        return user;
     }
 }
