@@ -1,535 +1,627 @@
 <!DOCTYPE html>
 <html lang="en" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>حجز القداسات</title>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>حجز القداسات</title>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.css"
+        rel="stylesheet"/>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <link th:href="@{/css/fixed.css}" rel="stylesheet" type="text/css"/>
+  <link th:href="@{/css/fixed.css}" rel="stylesheet" type="text/css"/>
 
-    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"/>
-    <style th:inline="text">
-        .home-inner {
-            background: url([[@{/images/home.jpeg}]]);
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            opacity: .85;
-        }
+  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"/>
+  <style th:inline="text">
+    .home-inner {
+      background: url([[@{/images/home.jpeg}]]);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      opacity: .85;
+    }
 
-        .fixed {
-            background: url([[@{/images/apple.png}]]);
-            z-index: -1;
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-        }
-    </style>
+    .fixed {
+      background: url([[@{/images/apple.png}]]);
+      z-index: -1;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+  </style>
 </head>
 
 <body data-spy="scroll" data-target="#navbarResponsive">
 <!--Start Home Section-->
 <div id="home">
-    <!-- Start Navigation Bar-->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-        <a class="navbar-brand" href="#">
-            <i class="fas fa-church fa-2x" style="color:#1EBBA3"></i>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#home">الرئيسية</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#instructions">تعليمات الحضور</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#massReservation">الحجز</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#about">عن الموقع</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <!-- End Navigation Bar-->
-
-    <!--Start Landing Page-->
-    <div class="landing">
-        <div class="home-wrap">
-            <div class="home-inner">
-
-            </div>
-        </div>
+  <!-- Start Navigation Bar-->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-church fa-2x" style="color:#1EBBA3"></i>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarResponsive">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#home">الرئيسية</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#instructions">تعليمات الحضور</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#massReservation">الحجز</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#about">عن الموقع</a>
+        </li>
+      </ul>
     </div>
+  </nav>
+  <!-- End Navigation Bar-->
 
-    <div class="caption text-center">
-        <h1>مرحبا بك في موقع حجز القداسات</h1>
-        <h3>بكنيسة السيدة العذراء ومارجرجس بغبريال</h3>
-        <a class="btn btn-outline-light btn-lg" href="#instructions">بدء الحجز</a>
+  <!--Start Landing Page-->
+  <div class="landing">
+    <div class="home-wrap">
+      <div class="home-inner">
+
+      </div>
     </div>
-    <!--End Landing Page-->
+  </div>
+
+  <div class="caption text-center">
+    <h1>مرحبا بك في موقع حجز القداسات</h1>
+    <h3>بكنيسة السيدة العذراء ومارجرجس بغبريال</h3>
+    <a class="btn btn-outline-light btn-lg" href="#instructions">بدء الحجز</a>
+  </div>
+  <!--End Landing Page-->
 </div>
 <!--END Home Section-->
 
 <div id="instructions" class="offset">
 
-    <div class="jumbotron">
-        <div class="narrow text-center">
-            <div class="col-12">
-                <h3 class="heading">تعليمات الحضور</h3>
-                <div class="heading-underline"></div>
-            </div>
+  <div class="jumbotron">
+    <div class="narrow text-center">
+      <div class="col-12">
+        <h3 class="heading">تعليمات الحضور</h3>
+        <div class="heading-underline"></div>
+      </div>
 
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <div class="feature">
-                        <i class="fas fa-head-side-mask fa-4x" data-fa-transform="shrink-3 up-5"
-                           style="color:#1EBBA3"></i>
-                    </div>
-                    <h3>الكمامة</h3>
-                    <p>ممنوع نهائيا الحضور بدون كمامة وعدم خلعها نهائيا اثناء القداس الا في حالة التناول فقط</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="feature">
-                        <i class="fas fa-handshake-slash fa-4x" data-fa-transform="shrink-4.5 up-4.5"
-                           style="color:#1EBBA3"></i>
-                    </div>
-                    <h3>المصافحة</h3>
-                    <p>ممنوع نهائيا المصافحة قبل او اثناء او بعد القداس</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="feature">
-                        <i class="fas fa-people-arrows fa-4x" data-fa-transform="shrink-3 up-5"
-                           style="color:#1EBBA3"></i>
-                    </div>
-                    <h3>التباعد</h3>
-                    <p>الحفاظ علي المسافات بين الشعب وعدم جلوس اكثر من شخصين في الدكة الواحدة</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="feature">
-                        <i class="fas fa-sink fa-4x" data-fa-transform="shrink-3 up-5" style="color:#1EBBA3"></i>
-                    </div>
-                    <h3>الماء</h3>
-                    <p>الحضور بزجاجة الماء الخاصة لصرف التناول</p>
-                </div>
-
-            </div>
+      <div class="row text-center">
+        <div class="col-md-3">
+          <div class="feature">
+            <i class="fas fa-head-side-mask fa-4x" data-fa-transform="shrink-3 up-5"
+               style="color:#1EBBA3"></i>
+          </div>
+          <h3>الكمامة</h3>
+          <p>ممنوع نهائيا الحضور بدون كمامة وعدم خلعها نهائيا اثناء القداس الا في حالة التناول
+            فقط</p>
         </div>
+        <div class="col-md-3">
+          <div class="feature">
+            <i class="fas fa-handshake-slash fa-4x" data-fa-transform="shrink-4.5 up-4.5"
+               style="color:#1EBBA3"></i>
+          </div>
+          <h3>المصافحة</h3>
+          <p>ممنوع نهائيا المصافحة قبل او اثناء او بعد القداس</p>
+        </div>
+        <div class="col-md-3">
+          <div class="feature">
+            <i class="fas fa-people-arrows fa-4x" data-fa-transform="shrink-3 up-5"
+               style="color:#1EBBA3"></i>
+          </div>
+          <h3>التباعد</h3>
+          <p>الحفاظ علي المسافات بين الشعب وعدم جلوس اكثر من شخصين في الدكة الواحدة</p>
+        </div>
+        <div class="col-md-3">
+          <div class="feature">
+            <i class="fas fa-sink fa-4x" data-fa-transform="shrink-3 up-5"
+               style="color:#1EBBA3"></i>
+          </div>
+          <h3>الماء</h3>
+          <p>الحضور بزجاجة الماء الخاصة لصرف التناول</p>
+        </div>
+
+      </div>
     </div>
+  </div>
 </div>
 
 <div id="massReservation" class="offset">
 
-    <div class="fixed-background">
-        <div class="row dark text-center">
+  <div class="fixed-background">
+    <div class="row dark text-center">
 
-            <div class="col-12">
-                <h3 class="heading">التسجيل</h3>
-                <div class="heading-underline"></div>
-            </div>
+      <div class="col-12">
+        <h3 class="heading">التسجيل</h3>
+        <div class="heading-underline"></div>
+      </div>
 
-            <div class="col-md-12">
-                <div class="feature">
-                    <i class="fas fa-user-plus fa-3x" data-fa-transform="shrink-3 up-5"
-                       style="color:#1EBBA3" data-toggle="modal" data-target="#addUserModal"></i>
-                </div>
-                <h3>اضافة مستخدم</h3>
-            </div>
-
-            <div class="col-12">
-                <h3 class="heading">حجز القداسات</h3>
-                <div class="heading-underline"></div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="feature">
-                    <i class="fas fa-calendar-plus fa-3x" data-fa-transform="shrink-3 up-5"
-                       style="color:#1EBBA3" data-toggle="modal" data-target="#myModal"></i>
-                </div>
-                <h3>حجز قداس</h3>
-            </div>
-
-            <div class="col-md-3">
-                <div class="feature">
-                    <i class="fas fa-window-close fa-3x" data-fa-transform="shrink-3 up-5"
-                       style="color:red" data-toggle="modal" data-target="#myModal2"></i>
-                </div>
-                <h3>الغاء حجز قداس</h3>
-            </div>
-
-            <div class="col-md-3">
-                <div class="feature">
-                    <i class="fas fa-search fa-3x" data-fa-transform="shrink-3 up-5"
-                       style="color:#1EBBA3" data-toggle="modal" data-target="#myModal3"></i>
-                </div>
-                <h3>استعلام عن حجز قداس</h3>
-            </div>
-
-            <div class="col-md-3">
-                <div class="feature">
-                    <i class="fas fa-chair fa-3x" data-fa-transform="shrink-3 up-5"
-                       style="color:#1EBBA3" data-toggle="modal" data-target="#myModal4"></i>
-                </div>
-                <h3>استعلام عن مقاعد القداس</h3>
-            </div>
-
-        <div class="fixed-wrap">
-            <div class="fixed">
-
-            </div>
+      <div class="col-md-12">
+        <div class="feature">
+          <i class="fas fa-user-plus fa-3x" data-fa-transform="shrink-3 up-5"
+             style="color:#1EBBA3" data-toggle="modal" data-target="#addUserModal"></i>
         </div>
+        <h3>اضافة مستخدم</h3>
+      </div>
+
+      <div class="col-12">
+        <h3 class="heading">حجز القداسات</h3>
+        <div class="heading-underline"></div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature">
+          <i class="fas fa-calendar-plus fa-3x" data-fa-transform="shrink-3 up-5"
+             style="color:#1EBBA3" data-toggle="modal" data-target="#myModal"></i>
+        </div>
+        <h3>حجز قداس</h3>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature">
+          <i class="fas fa-window-close fa-3x" data-fa-transform="shrink-3 up-5"
+             style="color:red" data-toggle="modal" data-target="#myModal2"></i>
+        </div>
+        <h3>الغاء حجز قداس</h3>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature">
+          <i class="fas fa-search fa-3x" data-fa-transform="shrink-3 up-5"
+             style="color:#1EBBA3" data-toggle="modal" data-target="#myModal3"></i>
+        </div>
+        <h3>استعلام عن حجز قداس</h3>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature">
+          <i class="fas fa-chair fa-3x" data-fa-transform="shrink-3 up-5"
+             style="color:#1EBBA3" data-toggle="modal" data-target="#myModal4"></i>
+        </div>
+        <h3>استعلام عن مقاعد القداس</h3>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature">
+          <i class="fas fa-calendar-plus fa-3x" data-fa-transform="shrink-3 up-5"
+             style="color:#1EBBA3" data-toggle="modal" data-target="#younanModal"></i>
+        </div>
+        <h3>حجز قداسات يونان</h3>
+      </div>
+
+      <div class="fixed-wrap">
+        <div class="fixed">
+
+        </div>
+      </div>
     </div>
 
-</div>
+  </div>
 
-<div id="about" class="offset">
+  <div id="about" class="offset">
     <div th:insert="fragments :: footer"></div>
-</div>
+  </div>
 
-<!--add User -->
-<!-- Reservation Modal -->
-<div class="modal fade show" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel">
+  <!--add User -->
+  <div class="modal fade show" id="addUserModal" tabindex="-1" role="dialog"
+       aria-labelledby="addUserModalLabel">
     <div class="modal-dialog" role="document">
 
-        <div class="modal-content">
+      <div class="modal-content">
 
-            <div class="modal-header justify-content-center">
-                <h3 class="modal-title" id="addUserModalLabel">اضافة مستخدم جديد</h3>
-            </div>
-
-            <div class="modal-body">
-
-                <form id="addUserForm" class="horizontal-form" autocomplete="off">
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="addUserName"
-                               pattern="^([\u0621-\u064A]{2,}\s){3}([\u0621-\u064A]{2,}\s?)$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الاسم رباعي')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الاسم رباعي" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="tel"
-                               class="form-control"
-                               id="addUserPhone"
-                               oninvalid="this.setCustomValidity('من فضلك ادخا رقم الهاتف صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="رقم الموبايل"
-                               title="من فضلك ادخل رقم هاتف صالحا"
-                               pattern="^(010|011|012|015)[0-9]{8}$" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="addUserNationalId"
-                               pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الرقم القومي"
-                               required>
-                    </div>
-
-                    <br>
-
-                    <button id="addUserBtn" type="submit" class="btn btn-primary btn-lg btn-block"
-                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
-                        تسجيل
-                    </button>
-
-                </form>
-
-                <div class="text-center" style="color: red; margin-top: 1rem">
-                    <strong id="addUserResponse"></strong>
-                </div>
-            </div>
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="addUserModalLabel">اضافة مستخدم جديد</h3>
         </div>
+
+        <div class="modal-body">
+
+          <form id="addUserForm" class="horizontal-form" autocomplete="off">
+
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="addUserName"
+                     pattern="^([\u0621-\u064A]{2,}\s){3}([\u0621-\u064A]{2,}\s?)$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الاسم رباعي')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الاسم رباعي" required>
+            </div>
+
+            <div class="form-group">
+              <input type="tel"
+                     class="form-control"
+                     id="addUserPhone"
+                     oninvalid="this.setCustomValidity('من فضلك ادخا رقم الهاتف صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="رقم الموبايل"
+                     title="من فضلك ادخل رقم هاتف صالحا"
+                     pattern="^(010|011|012|015)[0-9]{8}$" required>
+            </div>
+
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="addUserNationalId"
+                     pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الرقم القومي"
+                     required>
+            </div>
+
+            <br>
+
+            <button id="addUserBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              تسجيل
+            </button>
+
+          </form>
+
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="addUserResponse"></strong>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
-<!-- Reservation Modal -->
-<div class="modal fade show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <!-- Reservation Modal -->
+  <div class="modal fade show" id="myModal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
 
-        <div class="modal-content">
+      <div class="modal-content">
 
-            <div class="modal-header justify-content-center">
-                <h3 class="modal-title" id="myModalLabel">حجز القداس</h3>
-            </div>
-
-            <div class="modal-body">
-
-                <form id="reservationForm" class="horizontal-form" autocomplete="off">
-
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="nationalId"
-                               pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الرقم القومي"
-                               required>
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-                        <input type="date" id="reservationDate" class="form-control" placeholder="يوم القداس" required>
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-                        <select class="form-control" id="reservationTimes" disabled="disabled" required>
-                            <option value="">لا توجد قداسات لهذا اليوم</option>
-                        </select>
-                    </div>
-
-                    <br>
-                    <button id="reserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
-                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
-                        حجز
-                    </button>
-
-                </form>
-
-                <div class="text-center" style="color: red; margin-top: 1rem">
-                    <strong id="response"></strong>
-                </div>
-            </div>
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="myModalLabel">حجز القداس</h3>
         </div>
-    </div>
-</div>
 
-<!-- Cancel Reservation Modal -->
-<div class="modal fade show" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-body">
+
+          <form id="reservationForm" class="horizontal-form" autocomplete="off">
+
+
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="nationalId"
+                     pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الرقم القومي"
+                     required>
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+              <input type="date" id="reservationDate" class="form-control" placeholder="يوم القداس"
+                     required>
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+              <select class="form-control" id="reservationTimes" disabled="disabled" required>
+                <option value="">لا توجد قداسات لهذا اليوم</option>
+              </select>
+            </div>
+
+            <br>
+            <button id="reserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              حجز
+            </button>
+
+          </form>
+
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="response"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Reservation Modal -->
+  <div class="modal fade show" id="myModal2" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel2">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <h3 class="modal-title" id="myModalLabel2">الغاء الحجز</h3>
-            </div>
-            <div class="modal-body">
-                <form id="cancelReservationForm" class="horizontal-form" autocomplete="off">
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="cancelNationalId"
-                               pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الرقم القومي"
-                               required>
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-
-                        <input class="form-control" placeholder="يوم القداس" id="cancelDate"
-                               required name="day"
-                               type="date">
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-
-                        <select class="form-control" id="cancelTimes" disabled="disabled" name="pray" required>
-                            <option value="">لا توجد قداسات لهذا اليوم</option>
-                        </select>
-
-                    </div>
-
-                    <br>
-                    <button id="cancelReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
-                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
-                        الغاء الحجز
-                    </button>
-                </form>
-                <div class="text-center" style="color: red; margin-top: 1rem">
-                    <strong id="cancelResponse"></strong>
-                </div>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="myModalLabel2">الغاء الحجز</h3>
         </div>
-    </div>
-</div>
+        <div class="modal-body">
+          <form id="cancelReservationForm" class="horizontal-form" autocomplete="off">
 
-<!-- Search Reservation Modal -->
-<div class="modal fade show" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="cancelNationalId"
+                     pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الرقم القومي"
+                     required>
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+
+              <input class="form-control" placeholder="يوم القداس" id="cancelDate"
+                     required name="day"
+                     type="date">
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+
+              <select class="form-control" id="cancelTimes" disabled="disabled" name="pray"
+                      required>
+                <option value="">لا توجد قداسات لهذا اليوم</option>
+              </select>
+
+            </div>
+
+            <br>
+            <button id="cancelReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              الغاء الحجز
+            </button>
+          </form>
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="cancelResponse"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Reservation Modal -->
+  <div class="modal fade show" id="myModal3" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel3">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <h3 class="modal-title" id="myModalLabel3">استعلام عن الحجز</h3>
-            </div>
-            <div class="modal-body">
-                <form id="searchReservationForm" class="horizontal-form" autocomplete="off">
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="searchNationalId"
-                               pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الرقم القومي"
-                               required>
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-
-                        <input class="form-control" placeholder="يوم القداس" id="searchDate"
-                               required name="day"
-                               type="date">
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-
-                        <select class="form-control" id="searchTimes" disabled="disabled" name="pray" required>
-                            <option value="">لا توجد قداسات لهذا اليوم</option>
-                        </select>
-
-                    </div>
-
-                    <br>
-                    <button id="searchReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
-                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
-                        استعلام
-                    </button>
-                </form>
-                <div class="text-center" style="color: red; margin-top: 1rem">
-                    <strong id="searchResponse"></strong>
-                </div>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="myModalLabel3">استعلام عن الحجز</h3>
         </div>
-    </div>
-</div>
+        <div class="modal-body">
+          <form id="searchReservationForm" class="horizontal-form" autocomplete="off">
 
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="searchNationalId"
+                     pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الرقم القومي"
+                     required>
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+
+              <input class="form-control" placeholder="يوم القداس" id="searchDate"
+                     required name="day"
+                     type="date">
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+
+              <select class="form-control" id="searchTimes" disabled="disabled" name="pray"
+                      required>
+                <option value="">لا توجد قداسات لهذا اليوم</option>
+              </select>
+
+            </div>
+
+            <br>
+            <button id="searchReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              استعلام
+            </button>
+          </form>
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="searchResponse"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel4">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <i class="fas fa-check-circle fa-4x" style="color: #1EBBA3"></i>
-            </div>
-            <div class="modal-body text-center">
-                <h2 id="header" style="color: #1EBBA3">بيانات الحجز</h2>
-                <div class="heading-underline"></div>
-                <div class="text-right" id="reservationDetails"
-                     style="margin-top: 2.3rem;margin-right: 9rem;margin-bottom: 3rem;">
-
-                </div>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <i class="fas fa-check-circle fa-4x" style="color: #1EBBA3"></i>
         </div>
-    </div>
-</div>
+        <div class="modal-body text-center">
+          <h2 id="header" style="color: #1EBBA3">بيانات الحجز</h2>
+          <div class="heading-underline"></div>
+          <div class="text-right" id="reservationDetails"
+               style="margin-top: 2.3rem;margin-right: 9rem;margin-bottom: 3rem;">
 
-<!-- Seats Modal -->
-<div class="modal fade show" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seats Modal -->
+  <div class="modal fade show" id="myModal4" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel4">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <h3 class="modal-title" id="myModalLabel4">استعلام عن المقاعد المتاحة</h3>
-            </div>
-            <div class="modal-body">
-
-                <form id="seatsForm" class="horizontal-form" autocomplete="off">
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-
-                        <input class="form-control" placeholder="يوم القداس" id="seatsDate" required type="date">
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-
-                        <select class="form-control" id="seatsTimes" disabled="disabled" name="pray" required>
-                            <option value="">لا توجد قداسات لهذا اليوم</option>
-                        </select>
-
-                    </div>
-
-                    <br>
-                    <button id="seatsBtn" type="submit" class="btn btn-primary btn-lg btn-block"
-                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
-                        استعلام
-                    </button>
-                </form>
-                <div class="text-center" style="color: red; margin-top: 1rem">
-                    <strong id="seatsResponse"></strong>
-                </div>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="myModalLabel4">استعلام عن المقاعد المتاحة</h3>
         </div>
-    </div>
-</div>
+        <div class="modal-body">
 
-<div class="modal fade show" id="myModal5" role="dialog" aria-labelledby="myModalLabel5">
+          <form id="seatsForm" class="horizontal-form" autocomplete="off">
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+
+              <input class="form-control" placeholder="يوم القداس" id="seatsDate" required
+                     type="date">
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+
+              <select class="form-control" id="seatsTimes" disabled="disabled" name="pray" required>
+                <option value="">لا توجد قداسات لهذا اليوم</option>
+              </select>
+
+            </div>
+
+            <br>
+            <button id="seatsBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              استعلام
+            </button>
+          </form>
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="seatsResponse"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" id="myModal5" role="dialog" aria-labelledby="myModalLabel5">
     <div class="modal-dialog" role="document">
 
-        <div class="modal-content">
+      <div class="modal-content">
 
-            <div class="modal-header justify-content-center">
-                <h3 class="modal-title" id="myModalLabel5">حجز سهرة كيهك</h3>
-            </div>
-
-            <div class="modal-body">
-
-                <form id="eveningReservationForm" class="horizontal-form" autocomplete="off">
-
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="eveningNationalId"
-                               pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
-                               oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
-                               oninput="setCustomValidity('')"
-                               placeholder="الرقم القومي"
-                               required>
-                    </div>
-
-                    <div class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
-                        <select class="form-control" id="eveningId" required>
-                            <!--                            <option value="1">الخميس 2020/12/10</option>-->
-                            <option value="2">السبت 2020/12/12</option>
-                            <!--                            <option value="3">الخميس 2020/12/17</option>-->
-                            <option value="4">السبت 2020/12/19</option>
-                            <!--                            <option value="5">الخميس 2020/12/24</option>-->
-                            <option value="6">السبت 2020/12/26</option>
-                            <option value="7">الخميس 2020/12/31</option>
-                            <option value="8">السبت 2021/01/02</option>
-                        </select>
-                    </div>
-
-                    <br>
-
-                    <button id="eveningReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
-                            style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
-                        حجز
-                    </button>
-
-                </form>
-
-                <div class="text-center" style="color: red; margin-top: 1rem">
-                    <strong id="eveningResponse"></strong>
-                </div>
-            </div>
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="myModalLabel5">حجز سهرة كيهك</h3>
         </div>
+
+        <div class="modal-body">
+
+          <form id="eveningReservationForm" class="horizontal-form" autocomplete="off">
+
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="eveningNationalId"
+                     pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الرقم القومي"
+                     required>
+            </div>
+
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+              <select class="form-control" id="eveningId" required>
+                <!--                            <option value="1">الخميس 2020/12/10</option>-->
+                <option value="2">السبت 2020/12/12</option>
+                <!--                            <option value="3">الخميس 2020/12/17</option>-->
+                <option value="4">السبت 2020/12/19</option>
+                <!--                            <option value="5">الخميس 2020/12/24</option>-->
+                <option value="6">السبت 2020/12/26</option>
+                <option value="7">الخميس 2020/12/31</option>
+                <option value="8">السبت 2021/01/02</option>
+              </select>
+            </div>
+
+            <br>
+
+            <button id="eveningReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              حجز
+            </button>
+
+          </form>
+
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="eveningResponse"></strong>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+
+  <div class="modal fade show" id="younanModal" tabindex="-1" role="dialog"
+       aria-labelledby="younanLabel">
+    <div class="modal-dialog" role="document">
+
+      <div class="modal-content">
+
+        <div class="modal-header justify-content-center">
+          <h3 class="modal-title" id="younanLabel">حجز القداس</h3>
+        </div>
+
+        <div class="modal-body">
+
+          <form id="younanReservationForm" class="horizontal-form" autocomplete="off">
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     id="younanNationalId"
+                     pattern="^[2|3](\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))(01|02|03|04|11|12|13|14|15|16|17|18|19|21|22|23|24|25|26|27|28|29|31|32|33|34|35|88)\d{5}$"
+                     oninvalid="this.setCustomValidity('من فضلك ادخل الرقم القومي صحيحا')"
+                     oninput="setCustomValidity('')"
+                     placeholder="الرقم القومي"
+                     required>
+            </div>
 
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+              <select class="form-control" id="younanReservationDate" required>
+                <option value="2021-02-22">الاثنين 22-02-2021</option>
+                <option value="2021-02-23">الثلاثاء 23-02-2021</option>
+                <option value="2021-02-24">الاربعاء 24-02-2021</option>
+              </select>
+            </div>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <div
+                class="form-group cell small-9 medium-offset-4 medium-3 text-center medium-text-left">
+              <select class="form-control" id="younanReservationTime" required>
+                <option value="11:00:00">القداس الاول 11-1</option>
+                <option value="13:00:00">القداس الثاني 1-3</option>
+                <option value="15:00:00">القداس الثالث من 3-5</option>
+              </select>
+            </div>
 
-<script th:src="@{/js/app.js}"></script>
+            <br>
+            <button id="younanReserveBtn" type="submit" class="btn btn-primary btn-lg btn-block"
+                    style="background-color:white ; border-color: #1EBBA3; color: #1EBBA3">
+              حجز
+            </button>
+
+          </form>
+
+          <div class="text-center" style="color: red; margin-top: 1rem">
+            <strong id="younanResponse"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+          integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+          crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script th:src="@{/js/app.js}"></script>
 
 </body>
 </html>

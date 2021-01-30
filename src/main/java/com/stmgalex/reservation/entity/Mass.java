@@ -39,6 +39,9 @@ public class Mass implements Serializable {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean enabled = true;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean yonan = true;
+
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;

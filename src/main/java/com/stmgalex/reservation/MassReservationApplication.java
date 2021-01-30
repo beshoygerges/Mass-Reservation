@@ -1,7 +1,11 @@
 package com.stmgalex.reservation;
 
-import com.stmgalex.reservation.entity.Evening;
-import com.stmgalex.reservation.repository.EveningRepository;
+import com.stmgalex.reservation.entity.Mass;
+import com.stmgalex.reservation.repository.MassRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -9,69 +13,95 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 @Slf4j
 @AllArgsConstructor
 @SpringBootApplication
 public class MassReservationApplication implements CommandLineRunner {
 
-    private final EveningRepository eveningRepository;
+  private final MassRepository massRepository;
 
-    public static void main(String[] args) {
-        SpringApplication.run(MassReservationApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MassReservationApplication.class, args);
+  }
 
-    @Transactional
-    @Override
-    public void run(String... args) throws Exception {
-        if (eveningRepository.count() == 0) {
-            List<Evening> evenings = new ArrayList<>();
+  @Transactional
+  @Override
+  public void run(String... args) throws Exception {
+    List<Mass> masses = new ArrayList<>();
 
-            Evening evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 10));
-            evenings.add(evening);
+    Mass mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 22));
+    mass.setTime(LocalTime.of(11, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 12));
-            evenings.add(evening);
+    masses.add(mass);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 17));
-            evenings.add(evening);
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 22));
+    mass.setTime(LocalTime.of(13, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 19));
-            evenings.add(evening);
+    masses.add(mass);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 24));
-            evenings.add(evening);
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 22));
+    mass.setTime(LocalTime.of(15, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 26));
-            evenings.add(evening);
+    masses.add(mass);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2020, 12, 31));
-            evenings.add(evening);
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 23));
+    mass.setTime(LocalTime.of(11, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
 
-            evening = new Evening();
-            evening.setTotalSeats(200);
-            evening.setDate(LocalDate.of(2021, 1, 2));
-            evenings.add(evening);
+    masses.add(mass);
 
-            eveningRepository.saveAll(evenings);
-        }
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 23));
+    mass.setTime(LocalTime.of(13, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
 
-    }
+    masses.add(mass);
+
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 23));
+    mass.setTime(LocalTime.of(15, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
+
+    masses.add(mass);
+
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 24));
+    mass.setTime(LocalTime.of(11, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
+
+    masses.add(mass);
+
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 24));
+    mass.setTime(LocalTime.of(13, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
+
+    masses.add(mass);
+
+    mass = new Mass();
+    mass.setDate(LocalDate.of(2021, 2, 24));
+    mass.setTime(LocalTime.of(15, 00));
+    mass.setTotalSeats(150);
+    mass.setYonan(true);
+
+    masses.add(mass);
+
+    massRepository.saveAll(masses);
+
+  }
 }
