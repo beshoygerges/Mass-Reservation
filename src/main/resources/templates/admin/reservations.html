@@ -101,18 +101,18 @@
                             <div class="pagination-div text-center">
 
                                 <span th:if="${page.hasPrevious()}">
-                                    <a th:href="@{/admin/masses/reservations(page=${page.number-1},size=${page.size})}">السابق</a>
+                                    <a th:href="@{${#httpServletRequest.requestURI}(page=${page.number-1},size=${page.size})}">السابق</a>
                                 </span>
 
                                 <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
                                     <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
                                     <span th:unless="${page.number == i}">
-                                         <a th:href="@{/admin/masses/reservations(page=${i},size=${page.size})}">[[${i}+1]]</a>
+                                         <a th:href="@{${#httpServletRequest.requestURI}(page=${i},size=${page.size})}">[[${i}+1]]</a>
                                     </span>
                                 </th:block>
 
                                 <span th:if="${page.hasNext()}">
-                                    <a th:href="@{/admin/masses/reservations(page=${page.number+1},size=${page.size})}">التالي</a>
+                                    <a th:href="@{${#httpServletRequest.requestURI}(page=${page.number+1},size=${page.size})}">التالي</a>
                                 </span>
                             </div>
                         </div>
