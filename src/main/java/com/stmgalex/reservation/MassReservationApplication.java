@@ -1,9 +1,8 @@
 package com.stmgalex.reservation;
 
-import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.repository.MassRepository;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import com.stmgalex.reservation.constants.Gender;
+import com.stmgalex.reservation.entity.User;
+import com.stmgalex.reservation.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootApplication
 public class MassReservationApplication implements CommandLineRunner {
 
-  private final MassRepository massRepository;
+  private final UserRepository userRepository;
 
   public static void main(String[] args) {
     SpringApplication.run(MassReservationApplication.class, args);
@@ -27,81 +26,19 @@ public class MassReservationApplication implements CommandLineRunner {
   @Transactional
   @Override
   public void run(String... args) throws Exception {
-    List<Mass> masses = new ArrayList<>();
 
-    Mass mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 22));
-    mass.setTime(LocalTime.of(11, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
+    List<User> users = new ArrayList<>();
 
-    masses.add(mass);
+    userRepository.findAll().stream().forEach(user -> {
+      int genderNumber = Integer.parseInt(user.getNationalId().substring(12, 13));
+      if (genderNumber % 2 == 0) {
+        user.setGender(Gender.FEMALE);
+      } else {
+        user.setGender(Gender.MALE);
+      }
+      users.add(user);
+    });
 
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 22));
-    mass.setTime(LocalTime.of(13, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 22));
-    mass.setTime(LocalTime.of(15, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 23));
-    mass.setTime(LocalTime.of(11, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 23));
-    mass.setTime(LocalTime.of(13, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 23));
-    mass.setTime(LocalTime.of(15, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 24));
-    mass.setTime(LocalTime.of(11, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 24));
-    mass.setTime(LocalTime.of(13, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    mass = new Mass();
-    mass.setDate(LocalDate.of(2021, 2, 24));
-    mass.setTime(LocalTime.of(15, 00));
-    mass.setTotalSeats(150);
-    mass.setYonan(true);
-
-    masses.add(mass);
-
-    massRepository.saveAll(masses);
-
+    userRepository.saveAll(users);
   }
 }

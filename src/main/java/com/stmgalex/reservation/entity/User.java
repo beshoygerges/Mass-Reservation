@@ -1,5 +1,6 @@
 package com.stmgalex.reservation.entity;
 
+import com.stmgalex.reservation.constants.Gender;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +11,8 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,6 +49,9 @@ public class User implements Serializable {
 
   @Column(columnDefinition = "int default 0")
   private int age;
+
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
 
   @Column(nullable = false)
   @CreationTimestamp
