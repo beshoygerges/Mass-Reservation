@@ -27,7 +27,7 @@ public class AdminMassReservationController {
     private final AdminService adminService;
 
     @GetMapping
-    public String getMassReservations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+    public String getReservations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
                                       @RequestParam(defaultValue = "10") int size) {
 
         Sort sort = Sort.by("id").descending();

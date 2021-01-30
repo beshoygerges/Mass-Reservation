@@ -6,44 +6,46 @@ import com.stmgalex.reservation.entity.Evening;
 import com.stmgalex.reservation.entity.EveningReservation;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 public interface AdminService {
 
-    Statistics getStatistics();
+  Statistics getStatistics();
 
-    Page<Mass> getMasses(Pageable pageable, LocalDate date);
+  Page<Mass> getMasses(Pageable pageable, LocalDate date);
 
-    Page<Evening> getEvenings(Pageable pageable);
+  Page<Evening> getEvenings(Pageable pageable);
 
-    void disableMass(int id);
+  void disableMass(int id);
 
-    void enableMass(int id);
+  void enableMass(int id);
 
-    void disableEvening(int id);
+  void disableEvening(int id);
 
-    void enableEvening(int id);
+  void enableEvening(int id);
 
-    void exportMassUsers(int id, HttpServletResponse response) throws IOException;
+  void exportMassUsers(int id, HttpServletResponse response) throws IOException;
 
-    void updateMass(MassDto massDto);
+  void updateMass(MassDto massDto);
 
-    Page<MassReservation> getMassReservations(Pageable pageable);
+  Page<MassReservation> getMassReservations(Pageable pageable);
 
-    Page<EveningReservation> getEveningReservations(Pageable pageable);
+  Page<EveningReservation> getEveningReservations(Pageable pageable);
 
-    void disableMassReservation(int id);
+  void disableMassReservation(int id);
 
-    void enableMassReservation(int id);
+  void enableMassReservation(int id);
 
-    void disableEveningReservation(int id);
+  void disableEveningReservation(int id);
 
-    void enableEveningReservation(int id);
+  void enableEveningReservation(int id);
 
-    void exportEveningUsers(int id, HttpServletResponse response) throws IOException;
+  void exportEveningUsers(int id, HttpServletResponse response) throws IOException;
+
+  Page<MassReservation> getMassReservations(int id, PageRequest pageRequest);
 }
