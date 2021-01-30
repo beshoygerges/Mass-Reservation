@@ -37,7 +37,7 @@ public class MassController {
 
   @GetMapping
   public String getMasses(Model model, @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "20") int size,
       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
     Sort sort = Sort.by("id").ascending();
@@ -62,7 +62,7 @@ public class MassController {
   @GetMapping("/{id}/reservations")
   public String getMassReservations(@PathVariable int id, Model model,
       @RequestParam(name = "page", defaultValue = "0") int pageNumber,
-      @RequestParam(defaultValue = "10") int size) {
+      @RequestParam(defaultValue = "20") int size) {
 
     Sort sort = Sort.by("id").descending();
 
