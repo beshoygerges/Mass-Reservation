@@ -22,6 +22,9 @@ function updateTimes(day, times) {
     $('#' + times + '').prop('disabled', false);
     $('#' + times + '').append(`<option value="06:00:00">06:00</option>`);
     $('#' + times + '').append(`<option value="08:00:00">08:00</option>`);
+  } else if (day == 3) {
+    $('#' + times + '').append(`<option value="08:00:00">08:00</option>`);
+    $('#' + times + '').prop('disabled', false);
   } else {
     $('#' + times + '').prop('disabled', true);
     $('#' + times + '').append(
