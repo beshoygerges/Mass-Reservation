@@ -73,7 +73,6 @@ public class MassController {
     model.addAttribute("reservations", page.getContent()
         .stream()
         .map(m -> MapperUtil.map(m, ReservationDto.class))
-        .sorted(Comparator.comparing(ReservationDto::getId))
         .collect(Collectors.toList()));
 
     model.addAttribute("page", page);

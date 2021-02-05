@@ -89,11 +89,11 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   public Page<Mass> getMasses(Pageable pageable, LocalDate date) {
-      if (Objects.nonNull(date)) {
-          return massRepository.findAllByDateEquals(pageable, date);
-      } else {
-          return massRepository.findAllByDateGreaterThanEqual(pageable, LocalDate.now());
-      }
+    if (Objects.nonNull(date)) {
+      return massRepository.findAllByDateEquals(pageable, date);
+    } else {
+      return massRepository.findAllByDateGreaterThanEqual(pageable, LocalDate.now());
+    }
 
   }
 

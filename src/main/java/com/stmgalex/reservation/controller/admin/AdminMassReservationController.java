@@ -4,6 +4,8 @@ import com.stmgalex.reservation.dto.ReservationDto;
 import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.service.AdminService;
 import com.stmgalex.reservation.util.MapperUtil;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,51 +17,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Comparator;
-import java.util.stream.Collectors;
-
 @AllArgsConstructor
 @Controller
 @RequestMapping(value = {"/admin/masses/reservations"})
 public class AdminMassReservationController {
 
-    private final AdminService adminService;
+  private final AdminService adminService;
 
-    @GetMapping
-    public String getReservations(Model model, @RequestParam(name = "page", defaultValue = "0") int pageNumber,
-                                      @RequestParam(defaultValue = "20") int size) {
+  @GetMapping
+  public String getReservations(Model model,
+      @RequestParam(name = "page", defaultValue = "0") int pageNumber,
+      @RequestParam(defaultValue = "20") int size) {
 
-        Sort sort = Sort.by("id").descending();
+    Sort sort = Sort.by("id").descending();
 
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+    PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
 
-        Page<MassReservation> page = adminService.getMassReservations(pageRequest);
+    Page<MassReservation> page = adminService.getMassReservations(pageRequest);
 
-        model.addAttribute("reservations", page.getContent()
-                .stream()
-                .map(m -> MapperUtil.map(m, ReservationDto.class))
-                .sorted(Comparator.comparing(ReservationDto::getId))
-                .collect(Collectors.toList()));
+    model.addAttribute("reservations", page.getContent()
+        .stream()
+        .map(m -> MapperUtil.map(m, ReservationDto.class))
+        .collect(Collectors.toList()));
 
-        model.addAttribute("page", page);
+    model.addAttribute("page", page);
 
-        return "admin/reservations";
-    }
+    return "admin/reservations";
+  }
 
-    @GetMapping("{id}/disable")
-    public String disableReservation(@PathVariable int id, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        adminService.disableMassReservation(id);
-        return "redirect:" + referer;
-    }
+  @GetMapping("{id}/disable")
+  public String disableReservation(@PathVariable int id, HttpServletRequest request) {
+    String referer = request.getHeader("Referer");
+    adminService.disableMassReservation(id);
+    return "redirect:" + referer;
+  }
 
-    @GetMapping("{id}/enable")
-    public String enableReservation(@PathVariable int id, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
-        adminService.enableMassReservation(id);
-        return "redirect:" + referer;
-    }
+  @GetMapping("{id}/enable")
+  public String enableReservation(@PathVariable int id, HttpServletRequest request) {
+    String referer = request.getHeader("Referer");
+    adminService.enableMassReservation(id);
+    return "redirect:" + referer;
+  }
 
 
 }
