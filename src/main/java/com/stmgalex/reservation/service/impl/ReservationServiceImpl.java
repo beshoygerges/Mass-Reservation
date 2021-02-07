@@ -15,7 +15,6 @@ import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.entity.User;
 import com.stmgalex.reservation.exception.EntityNotFoundException;
-import com.stmgalex.reservation.exception.MassIntervalNotExceededException;
 import com.stmgalex.reservation.exception.NoActiveReservationsException;
 import com.stmgalex.reservation.exception.NoAvaialableSeatsException;
 import com.stmgalex.reservation.exception.ReservationNotEnabledException;
@@ -51,6 +50,11 @@ public class ReservationServiceImpl implements ReservationService {
     return e2.getEvening().getDate().compareTo(e1.getEvening().getDate());
   }
 
+  private static int compareByMassDate(MassReservation e1, MassReservation e2) {
+    return e2.getMass().getDate().compareTo(e1.getMass().getDate());
+  }
+
+
   @Override
   public synchronized ReservationResponse reserve(final MassReservationRequest request) {
 
@@ -58,24 +62,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     User user = optionalUser.orElseThrow(() -> new RuntimeException("من فضلك قم بالتسجيل اولا"));
 
-    Mass mass = user.getLastActiveMass(request.isYonanMass());
-
-    if (Objects.nonNull(mass) &&
-        !isExceedMassIntervals(mass, request.getMassDate(), request.isYonanMass())) {
-      if (!request.isYonanMass()) {
-        throw new MassIntervalNotExceededException(
-            "    عفوا يمكنك الحجز مجددا من يوم " + mass.getDate().plusDays(reservationPeriod)
-                + " ");
-      } else {
-        throw new MassIntervalNotExceededException(
-            "عفوا لقد قمت بحجز قداس لهذا اليوم مسبقا");
-      }
-    }
-
     Optional<Mass> optionalMass = massRepository
         .findByDateAndTime(request.getMassDate(), request.getMassTime());
 
-    mass = optionalMass
+    Mass mass = optionalMass
         .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
 
     if (!mass.isEnabled()) {
@@ -84,6 +74,31 @@ public class ReservationServiceImpl implements ReservationService {
 
     if (!mass.haveSeats()) {
       throw new NoAvaialableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
+    }
+
+    user.getMassReservations()
+        .stream()
+        .filter(massReservation -> massReservation.isActive()
+            && massReservation.getMass().isEnabled()
+            && massReservation.getMass().getDate().equals(mass.getDate()))
+        .findFirst()
+        .ifPresent(a -> {
+          throw new RuntimeException("عفوا لقد قمت بحجز قداس في هذا اليوم من قبل");
+        });
+
+    if (!request.isYonanMass()) {
+      user.getMassReservations()
+          .stream()
+          .filter(
+              massReservation -> massReservation.isActive() && !massReservation.getMass().isYonan())
+          .sorted(ReservationServiceImpl::compareByMassDate)
+          .map(MassReservation::getMass)
+          .filter(lastMass -> !isValidPeriod(mass, lastMass))
+          .findFirst()
+          .ifPresent(lastMass -> {
+            throw new RuntimeException(
+                "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 10 ايام");
+          });
     }
 
     mass.reserveSeat();
@@ -95,6 +110,11 @@ public class ReservationServiceImpl implements ReservationService {
     massReservation = massReservationRepository.save(massReservation);
 
     return new ReservationResponse(massReservation);
+  }
+
+  private boolean isValidPeriod(Mass mass, Mass lastMass) {
+    long days = DAYS.between(mass.getDate(), lastMass.getDate());
+    return days >= reservationPeriod || days <= -1 * reservationPeriod;
   }
 
   @Transactional
@@ -226,10 +246,13 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   private boolean isExceedMassIntervals(Mass mass, LocalDate massDate, boolean yonanMass) {
+
     long days = DAYS.between(mass.getDate(), massDate);
+
     if (yonanMass) {
       return days >= 1 || days <= -1;
     }
+
     return days >= reservationPeriod || days <= -1 * reservationPeriod;
   }
 }
