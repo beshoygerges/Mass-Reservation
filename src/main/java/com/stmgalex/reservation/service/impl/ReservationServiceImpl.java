@@ -86,7 +86,7 @@ public class ReservationServiceImpl implements ReservationService {
           throw new RuntimeException("عفوا لقد قمت بحجز قداس في هذا اليوم من قبل");
         });
 
-    if (!request.isYonanMass()) {
+    if (!request.isYonanMass() && !mass.getDate().equals(LocalDate.of(2021, 02, 18))) {
       user.getMassReservations()
           .stream()
           .filter(
