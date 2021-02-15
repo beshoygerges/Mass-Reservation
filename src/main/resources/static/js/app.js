@@ -17,43 +17,73 @@ updateTimes(currentDate.getDay(), 'searchTimes');
 updateTimes(currentDate.getDay(), 'seatsTimes');
 
 function updateTimes(day, times) {
-  $('#' + times + '').empty();
-  if (day == 0 || day == 5) {
-    $('#' + times + '').prop('disabled', false);
-    $('#' + times + '').append(`<option value="06:00:00">06:00</option>`);
-    $('#' + times + '').append(`<option value="08:00:00">08:00</option>`);
-  } else if (day == 3 || day == 4) {
-    $('#' + times + '').append(`<option value="08:00:00">08:00</option>`);
-    $('#' + times + '').prop('disabled', false);
-  } else {
-    $('#' + times + '').prop('disabled', true);
-    $('#' + times + '').append(
-        `<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
-  }
+  // $('#' + times + '').empty();
+  // if (day == 0 || day == 5) {
+  //   $('#' + times + '').prop('disabled', false);
+  //   $('#' + times + '').append(`<option value="06:00:00">06:00</option>`);
+  //   $('#' + times + '').append(`<option value="08:00:00">08:00</option>`);
+  // } else if (day == 3 || day == 4) {
+  //   $('#' + times + '').append(`<option value="08:00:00">08:00</option>`);
+  //   $('#' + times + '').prop('disabled', false);
+  // } else {
+  //   $('#' + times + '').prop('disabled', true);
+  //   $('#' + times + '').append(
+  //       `<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
+  // }
+}
+
+function getMassesByDate(date,times) {
+  var massDate = date.toISOString().slice(0, 10);
+
+  $('#' + times + '').empty()
+
+  $.ajax({
+    type: "GET",
+    contentType: "application/json",
+    url: "/reservations/masses?date=" + massDate,
+    dataType: 'json',
+    cache: false,
+    timeout: 600000,
+    success: function (data) {
+      var masses = JSON.parse(JSON.stringify(data));
+      console.log(masses)
+      $('#' + times + '').prop('disabled', false);
+      for (i = 0; i < masses.length; i++) {
+        $('#' + times + '').append(
+            `<option value="` + masses[i].time + `">` + masses[i].time
+            + `</option>`);
+      }
+    },
+    error: function (e) {
+      $('#' + times + '').prop('disabled', true);
+      $('#' + times + '').append(
+          `<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
+    }
+  });
 }
 
 $('#reservationDate').change(function () {
   var date = $(this).val();
   date = new Date(date);
-  updateTimes(date.getDay(), 'reservationTimes');
+  getMassesByDate(date,'reservationTimes');
 });
 
 $('#cancelDate').change(function () {
   var date = $(this).val();
   date = new Date(date);
-  updateTimes(date.getDay(), 'cancelTimes');
+  getMassesByDate(date, 'cancelTimes');
 });
 
 $('#searchDate').change(function () {
   var date = $(this).val();
   date = new Date(date);
-  updateTimes(date.getDay(), 'searchTimes');
+  getMassesByDate(date, 'searchTimes');
 });
 
 $('#seatsDate').change(function () {
   var date = $(this).val();
   date = new Date(date);
-  updateTimes(date.getDay(), 'seatsTimes');
+  getMassesByDate(date, 'seatsTimes');
 });
 
 $(document).ready(function () {
@@ -428,12 +458,18 @@ function cancelEveningReservation() {
 
 }
 
+function resetTimes(times) {
+  $('#' + times + '').empty().append(
+      '<option selected="selected" value="">لا توجد قداسات لهذا اليوم</option>')
+  $('#' + times + '').prop('disabled', true);
+}
+
 $('#myModal').on('hidden.bs.modal', function () {
   $("#reserveBtn").prop("disabled", false);
   $("#response").text('');
   $('#reservationForm').trigger("reset");
   reservationDate.value = currentDate.toISOString().split("T")[0];
-  updateTimes(currentDate.getDay(), 'reservationTimes')
+  resetTimes('reservationTimes');
 });
 
 $('#myModal2').on('hidden.bs.modal', function () {
@@ -441,7 +477,7 @@ $('#myModal2').on('hidden.bs.modal', function () {
   $("#cancelResponse").text('');
   $('#cancelReservationForm').trigger("reset");
   cancelDate.value = currentDate.toISOString().split("T")[0];
-  updateTimes(currentDate.getDay(), 'cancelTimes')
+  resetTimes('cancelTimes');
 });
 
 $('#myModal3').on('hidden.bs.modal', function () {
@@ -449,7 +485,7 @@ $('#myModal3').on('hidden.bs.modal', function () {
   $("#searchResponse").text('');
   $('#searchReservationForm').trigger("reset");
   searchDate.value = currentDate.toISOString().split("T")[0];
-  updateTimes(currentDate.getDay(), 'searchTimes')
+  resetTimes('searchTimes');
 });
 
 $('#myModal4').on('hidden.bs.modal', function () {
@@ -457,7 +493,7 @@ $('#myModal4').on('hidden.bs.modal', function () {
   $("#seatsResponse").text('');
   $('#seatsForm').trigger("reset");
   seatsDate.value = currentDate.toISOString().split("T")[0];
-  updateTimes(currentDate.getDay(), 'seatsTimes')
+  resetTimes('seatsTimes');
 });
 
 $('#myModal5').on('hidden.bs.modal', function () {

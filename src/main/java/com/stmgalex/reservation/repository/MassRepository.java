@@ -3,6 +3,7 @@ package com.stmgalex.reservation.repository;
 import com.stmgalex.reservation.entity.Mass;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,6 @@ public interface MassRepository extends JpaRepository<Mass, Integer> {
   Page<Mass> findAllByDateGreaterThanEqual(Pageable pageable, LocalDate date);
 
   Page<Mass> findAllByDateEquals(Pageable pageable, LocalDate date);
+
+  List<Mass> findAllByDateEquals(LocalDate date);
 }

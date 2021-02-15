@@ -26,6 +26,7 @@ import com.stmgalex.reservation.repository.MassReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
 import com.stmgalex.reservation.service.ReservationService;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -240,19 +241,17 @@ public class ReservationServiceImpl implements ReservationService {
     return new ReservationResponse(eveningReservation);
   }
 
-  private boolean isValidPeriod(Evening evening, Evening lastEvening) {
-    long days = DAYS.between(evening.getDate(), lastEvening.getDate());
-    return days >= reservationPeriod || days <= -1 * reservationPeriod;
+  @Override
+  public List<Mass> getMassesWithDate(LocalDate date) {
+    List<Mass> masses = massRepository.findAllByDateEquals(date);
+    if (masses.isEmpty()) {
+      throw new RuntimeException("عفوا لا توجد قداسات في هذا اليوم");
+    }
+    return masses;
   }
 
-  private boolean isExceedMassIntervals(Mass mass, LocalDate massDate, boolean yonanMass) {
-
-    long days = DAYS.between(mass.getDate(), massDate);
-
-    if (yonanMass) {
-      return days >= 1 || days <= -1;
-    }
-
+  private boolean isValidPeriod(Evening evening, Evening lastEvening) {
+    long days = DAYS.between(evening.getDate(), lastEvening.getDate());
     return days >= reservationPeriod || days <= -1 * reservationPeriod;
   }
 }

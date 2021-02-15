@@ -8,6 +8,8 @@ import com.stmgalex.reservation.dto.MassReservationRequest;
 import com.stmgalex.reservation.dto.ReservationResponse;
 import com.stmgalex.reservation.dto.SearchReservationRequest;
 import com.stmgalex.reservation.entity.Mass;
+import java.time.LocalDate;
+import java.util.List;
 import javax.validation.Valid;
 
 public interface ReservationService {
@@ -23,4 +25,6 @@ public interface ReservationService {
   ReservationResponse reserve(EveningReservationRequest request);
 
   ReservationResponse cancelReservation(EveningReservationDisableRequest request);
+
+  List<Mass> getMassesWithDate(LocalDate localDate);
 }
