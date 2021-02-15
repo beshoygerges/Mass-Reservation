@@ -4,12 +4,17 @@ currentDate.setDate(currentDate.getDate() + 1);
 reservationDate.min = currentDate.toISOString().split("T")[0];
 
 cancelDate.min = currentDate.toISOString().split("T")[0];
+
 searchDate.min = currentDate.toISOString().split("T")[0];
+
 seatsDate.min = currentDate.toISOString().split("T")[0];
 
 reservationDate.value = currentDate.toISOString().split("T")[0];
+
 cancelDate.value = currentDate.toISOString().split("T")[0];
+
 searchDate.value = currentDate.toISOString().split("T")[0];
+
 seatsDate.value = currentDate.toISOString().split("T")[0];
 
 
