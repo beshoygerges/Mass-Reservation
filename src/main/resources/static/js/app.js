@@ -17,9 +17,7 @@ searchDate.value = currentDate.toISOString().split("T")[0];
 
 seatsDate.value = currentDate.toISOString().split("T")[0];
 
-
-
-function getMassesByDate(date,times) {
+function getMassesByDate(date, times) {
   var massDate = date.toISOString().slice(0, 10);
 
   $('#' + times + '').empty()
@@ -36,9 +34,11 @@ function getMassesByDate(date,times) {
       console.log(masses)
       $('#' + times + '').prop('disabled', false);
       for (i = 0; i < masses.length; i++) {
-        $('#' + times + '').append(
-            `<option value="` + masses[i].time + `">` + masses[i].time
-            + `</option>`);
+        if (masses[i].enabled) {
+          $('#' + times + '').append(
+              `<option value="` + masses[i].time + `">` + masses[i].time
+              + `</option>`);
+        }
       }
     },
     error: function (e) {
@@ -52,7 +52,7 @@ function getMassesByDate(date,times) {
 $('#reservationDate').change(function () {
   var date = $(this).val();
   date = new Date(date);
-  getMassesByDate(date,'reservationTimes');
+  getMassesByDate(date, 'reservationTimes');
 });
 
 $('#cancelDate').change(function () {
