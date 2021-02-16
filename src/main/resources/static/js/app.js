@@ -36,7 +36,7 @@ function getMassesByDate(date, times) {
       for (i = 0; i < masses.length; i++) {
         if (masses[i].enabled) {
           $('#' + times + '').append(
-              `<option value="` + masses[i].time + `">` + masses[i].time
+              `<option value="` + masses[i].time + `">` + masses[i].time.substring(0, 5)
               + `</option>`);
         }
       }
