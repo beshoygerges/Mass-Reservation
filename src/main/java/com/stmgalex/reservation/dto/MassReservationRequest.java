@@ -13,19 +13,17 @@ import lombok.Data;
 @Data
 public class MassReservationRequest implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @NotEmpty(message = "من فضلك ادخل رقم قومي صالحا")
-  private String nationalId;
+    @NotEmpty(message = "من فضلك ادخل رقم قومي صالحا")
+    private String nationalId;
 
-  @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd")
-  @NotNull(message = "من فضلك ادخل يوم القداس")
-  private LocalDate massDate;
+    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message = "من فضلك ادخل يوم القداس")
+    private LocalDate massDate;
 
-  @NotNull(message = "من فضلك ادخل وقت القداس")
-  private LocalTime massTime;
-
-  private boolean yonanMass;
+    @NotNull(message = "من فضلك ادخل وقت القداس")
+    private LocalTime massTime;
 
 
 }

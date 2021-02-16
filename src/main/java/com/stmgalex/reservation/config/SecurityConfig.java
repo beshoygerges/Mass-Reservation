@@ -13,46 +13,47 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Override
-  public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/webjars/**",
-        "/css/**", "/js/**",
-        "/images/**", "/fonts/**", "jquery.cookie/**", "font-awesome/**", "/charts/**");
-  }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/webjars/**",
+            "/css/**", "/js/**",
+            "/images/**", "/fonts/**", "jquery.cookie/**", "font-awesome/**", "/charts/**");
+    }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.inMemoryAuthentication()
-        .withUser("Admin")
-        .password(getPasswordEncoder().encode("ADMIN@admin_2020"))
-        .authorities("Admin");
-  }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+            .withUser("Admin")
+            .password(getPasswordEncoder().encode("ADMIN@admin_2020"))
+            .authorities("Admin");
+    }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-        .antMatchers("/reservations/**", "/", "/error", "/users/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .formLogin()
-        .permitAll()
-        .defaultSuccessUrl("/admin", true)
-        .and()
-        .logout()
-        .invalidateHttpSession(true)
-        .permitAll()
-        .and()
-        .exceptionHandling()
-        .accessDeniedHandler(((req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)));
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+            .antMatchers("/reservations/**", "/", "/error", "/users/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated()
+            .and()
+            .formLogin()
+            .permitAll()
+            .defaultSuccessUrl("/admin", true)
+            .and()
+            .logout()
+            .invalidateHttpSession(true)
+            .permitAll()
+            .and()
+            .exceptionHandling()
+            .accessDeniedHandler(
+                ((req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)));
 
-    http.csrf().disable();
+        http.csrf().disable();
 
-  }
+    }
 
-  @Bean
-  PasswordEncoder getPasswordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-  Optional<User> findByNationalId(String nationalId);
+    Optional<User> findByNationalId(String nationalId);
 
-  List<User> findByNationalIdOrName(String nationalId, String name);
+    List<User> findByNationalIdOrName(String nationalId, String name);
 }

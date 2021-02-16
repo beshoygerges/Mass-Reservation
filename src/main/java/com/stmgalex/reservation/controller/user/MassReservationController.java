@@ -6,7 +6,7 @@ import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.MassReservationRequest;
 import com.stmgalex.reservation.dto.SearchReservationRequest;
 import com.stmgalex.reservation.entity.Mass;
-import com.stmgalex.reservation.service.ReservationService;
+import com.stmgalex.reservation.service.MassService;
 import com.stmgalex.reservation.util.MapperUtil;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -30,33 +30,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/reservations/masses")
 public class MassReservationController {
 
-  private final ReservationService reservationService;
+  private final MassService massService;
 
   @PostMapping
   public ResponseEntity addReservation(@Valid @RequestBody MassReservationRequest request) {
-    return ResponseEntity.ok(reservationService.reserve(request));
+    return ResponseEntity.ok(massService.reserve(request));
   }
 
   @PostMapping("/search")
   public ResponseEntity getReservation(@Valid @RequestBody SearchReservationRequest request) {
-    return ResponseEntity.ok(reservationService.searchReservation(request));
+    return ResponseEntity.ok(massService.searchReservation(request));
   }
 
   @PostMapping("/delete")
   public ResponseEntity cancelReservation(@Valid @RequestBody CancelReservationRequest request) {
-    return ResponseEntity.ok(reservationService.cancelReservation(request));
+    return ResponseEntity.ok(massService.cancelReservation(request));
   }
 
   @PostMapping("/seats")
   public ResponseEntity getAvailableSeats(@Valid @RequestBody AvailableSeatsRequest request) {
-    Mass mass = reservationService.getAvailableSeats(request);
+    Mass mass = massService.getAvailableSeats(request);
     return ResponseEntity.ok(MapperUtil.map(mass, MassDto.class));
   }
 
   @GetMapping
   public ResponseEntity getMassesWithDate(
       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-    List<Mass> masses = reservationService.getMassesWithDate(date);
+    List<Mass> masses = massService.getMassesWithDate(date);
     return ResponseEntity.ok(masses.stream()
         .map(mass -> MapperUtil.map(mass, MassDto.class))
         .sorted(Comparator.comparing(MassDto::getTime))

@@ -7,13 +7,13 @@ import lombok.Data;
 @Data
 public class ReservationDto implements Serializable {
 
-  private Integer id;
+    private Integer id;
 
-  private MassDto mass;
+    private MassDto mass;
 
-  private Evening evening;
+    private Evening evening;
 
-  private UserDto user;
+    private UserDto user;
 
-  private boolean active;
+    private boolean active;
 }

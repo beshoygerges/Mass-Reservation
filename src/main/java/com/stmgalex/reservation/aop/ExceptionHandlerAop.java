@@ -25,35 +25,36 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ResponseBody
 public class ExceptionHandlerAop extends ResponseEntityExceptionHandler {
 
-  // error handle for @Valid
-  @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-      HttpHeaders headers,
-      HttpStatus status, WebRequest request) {
+    // error handle for @Valid
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+        MethodArgumentNotValidException ex,
+        HttpHeaders headers,
+        HttpStatus status, WebRequest request) {
 
-    Map<String, Object> body = new LinkedHashMap<>();
-    body.put("timestamp", new Date());
-    body.put("status", status.value());
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", status.value());
 
-    //Get all errors
-    List<String> errors = ex.getBindingResult()
-        .getFieldErrors()
-        .stream()
-        .map(x -> x.getDefaultMessage())
-        .collect(Collectors.toList());
+        //Get all errors
+        List<String> errors = ex.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(x -> x.getDefaultMessage())
+            .collect(Collectors.toList());
 
-    body.put("message", errors);
+        body.put("message", errors);
 
-    return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, headers, status);
 
-  }
+    }
 
-  @ResponseStatus(BAD_REQUEST)
-  @ExceptionHandler(RuntimeException.class)
-  public Response handleException(RuntimeException e) {
-    log.error(e.getMessage());
-    return new Response(400, e.getMessage());
-  }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(RuntimeException.class)
+    public Response handleException(RuntimeException e) {
+        log.error(e.getMessage());
+        return new Response(400, e.getMessage());
+    }
 
 
 }

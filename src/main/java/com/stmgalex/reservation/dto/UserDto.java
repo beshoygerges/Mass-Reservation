@@ -13,23 +13,24 @@ import lombok.Data;
 @Data
 public class UserDto implements Serializable {
 
-  @JsonProperty(access = READ_ONLY)
-  private Integer id;
+    @JsonProperty(access = READ_ONLY)
+    private Integer id;
 
-  @NotEmpty
-  private String name;
+    @NotEmpty
+    private String name;
 
-  @NotEmpty
-  private String nationalId;
+    @NotEmpty
+    private String nationalId;
 
-  @NotEmpty
-  private String mobileNumber;
+    @NotEmpty
+    private String mobileNumber;
 
-  @JsonProperty(access = READ_ONLY)
-  private Integer age;
+    @JsonProperty(access = READ_ONLY)
+    private Integer age;
 
-  @JsonProperty(access = READ_ONLY)
-  private LocalDate birthdate;
+    @JsonProperty(access = READ_ONLY)
+    private LocalDate birthdate;
 
-  private Gender gender;
+    @JsonProperty(access = READ_ONLY)
+    private Gender gender;
 }

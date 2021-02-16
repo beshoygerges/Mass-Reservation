@@ -99,10 +99,6 @@ $(document).ready(function () {
     addUser();
   });
 
-  $("#younanReservationForm").submit(function (event) {
-    event.preventDefault();
-    reserveYounanMass();
-  });
 });
 
 function addUser() {
@@ -142,48 +138,6 @@ function addUser() {
       console.log(res);
       $("#addUserResponse").text(res.message);
       $("#addUserBtn").prop("disabled", false);
-    }
-  });
-}
-
-function reserveYounanMass() {
-
-  $("#younanResponse").text('');
-
-  var request = {}
-  request["nationalId"] = $("#younanNationalId").val();
-  request["massTime"] = $("#younanReservationTime").val();
-  request["massDate"] = $("#younanReservationDate").val();
-  request["yonanMass"] = true;
-
-  $("#younanReserveBtn").prop("disabled", true);
-
-  $.ajax({
-    type: "POST",
-    contentType: "application/json",
-    url: "/reservations/masses",
-    data: JSON.stringify(request),
-    dataType: 'json',
-    cache: false,
-    timeout: 600000,
-    success: function (data) {
-      var details = JSON.parse(JSON.stringify(data));
-      $('#younanModal').modal('toggle');
-      $('#successModal').modal('show');
-      $('#header').html('بيانات الحجز');
-      $('#reservationDetails').html(
-          '<strong>الاسم        :   ' + details.name + '</strong><br>' +
-          '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
-          '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
-          '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
-          '<strong>حالة الحجز  :   تم التاكيد</strong>'
-      )
-    },
-    error: function (e) {
-      var res = JSON.parse(e.responseText)
-      console.log("ERROR : ", res);
-      $("#younanResponse").text(res.message);
-      $("#younanReserveBtn").prop("disabled", false);
     }
   });
 }
@@ -411,8 +365,3 @@ $('#addUserModal').on('hidden.bs.modal', function () {
   $('#addUserForm').trigger("reset");
 });
 
-$('#younanModal').on('hidden.bs.modal', function () {
-  $("#younanReserveBtn").prop("disabled", false);
-  $("#younanResponse").text('');
-  $('#younanReservationForm').trigger("reset");
-});

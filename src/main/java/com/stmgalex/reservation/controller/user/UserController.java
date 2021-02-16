@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  @PostMapping
-  public UserDto register(@Valid @RequestBody UserDto userDto) {
-    return userService.register(userDto);
-  }
+    @PostMapping
+    public UserDto register(@Valid @RequestBody UserDto userDto) {
+        return userService.register(userDto);
+    }
 }

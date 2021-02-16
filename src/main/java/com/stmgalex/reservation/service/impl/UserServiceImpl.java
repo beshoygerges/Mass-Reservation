@@ -3,6 +3,7 @@ package com.stmgalex.reservation.service.impl;
 import static com.stmgalex.reservation.util.DateUtil.calculateAge;
 import static com.stmgalex.reservation.util.DateUtil.getBirthDate;
 
+import com.stmgalex.reservation.constants.Gender;
 import com.stmgalex.reservation.dto.UserDto;
 import com.stmgalex.reservation.entity.User;
 import com.stmgalex.reservation.repository.UserRepository;
@@ -16,26 +17,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @Override
-  public UserDto register(final UserDto userDto) {
-    Optional<User> optionalUser = userRepository.findByNationalId(userDto.getNationalId());
+    @Override
+    public UserDto register(final UserDto userDto) {
+        Optional<User> optionalUser = userRepository.findByNationalId(userDto.getNationalId());
 
-    if (optionalUser.isPresent()) {
-      throw new RuntimeException("هذا المستخدم موجود بالفعل");
+        if (optionalUser.isPresent()) {
+            throw new RuntimeException("هذا المستخدم موجود بالفعل");
+        }
+
+        userDto.setName(userDto.getName().trim());
+
+        User user = MapperUtil.map(userDto, User.class);
+
+        user.setBirthdate(getBirthDate(user.getNationalId()));
+
+        user.setAge(calculateAge(user.getBirthdate()));
+
+        user.setGender(getGender(user));
+
+        user = userRepository.save(user);
+
+        return MapperUtil.map(user, UserDto.class);
     }
 
-    userDto.setName(userDto.getName().trim());
-
-    User user = MapperUtil.map(userDto, User.class);
-
-    user.setBirthdate(getBirthDate(user.getNationalId()));
-
-    user.setAge(calculateAge(user.getBirthdate()));
-
-    user = userRepository.save(user);
-
-    return MapperUtil.map(user, UserDto.class);
-  }
+    private Gender getGender(User user) {
+        int genderNumber = Integer.parseInt(user.getNationalId().substring(12, 13));
+        if (genderNumber % 2 == 0) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.MALE;
+        }
+    }
 }

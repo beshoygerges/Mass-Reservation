@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @JsonInclude(NON_NULL)
 public class Response implements Serializable {
 
-  private int code;
-  private String message;
-  private Object result;
+    private int code;
+    private String message;
+    private Object result;
 
-  public Response(int code, String message) {
-    this.code = code;
-    this.message = message;
-  }
+    public Response(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 }

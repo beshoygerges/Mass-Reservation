@@ -2,7 +2,7 @@ package com.stmgalex.reservation.exception;
 
 public class ReservationNotFoundException extends RuntimeException {
 
-  public ReservationNotFoundException(String message) {
-    super(message);
-  }
+    public ReservationNotFoundException(String message) {
+        super(message);
+    }
 }

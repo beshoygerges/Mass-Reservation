@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MassReservationRepository extends JpaRepository<MassReservation, Integer> {
 
-  Page<MassReservation> findAllByMass_Id(int massId, Pageable pageable);
+    Page<MassReservation> findAllByMass_Id(int massId, Pageable pageable);
 }

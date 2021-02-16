@@ -15,15 +15,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MassRepository extends JpaRepository<Mass, Integer> {
 
-  Optional<Mass> findByDateAndTime(LocalDate date, LocalTime time);
+    Optional<Mass> findByDateAndTime(LocalDate date, LocalTime time);
 
-  @Modifying
-  @Query("update Mass m set m.totalSeats = ?1, m.reservedSeats = m.reservedSeats+?2 where m.id = ?3")
-  void updateMassById(Integer totalSeats, Integer reservedSeats, Integer id);
+    @Modifying
+    @Query("update Mass m set m.totalSeats = ?1, m.reservedSeats = m.reservedSeats+?2 where m.id = ?3")
+    void updateMassById(Integer totalSeats, Integer reservedSeats, Integer id);
 
-  Page<Mass> findAllByDateGreaterThanEqual(Pageable pageable, LocalDate date);
+    Page<Mass> findAllByDateGreaterThanEqual(Pageable pageable, LocalDate date);
 
-  Page<Mass> findAllByDateEquals(Pageable pageable, LocalDate date);
+    Page<Mass> findAllByDateEquals(Pageable pageable, LocalDate date);
 
-  List<Mass> findAllByDateEquals(LocalDate date);
+    List<Mass> findAllByDateEquals(LocalDate date);
 }

@@ -7,28 +7,28 @@ import java.time.format.DateTimeFormatter;
 
 public final class DateUtil {
 
-  private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-  private DateUtil() {
+    private DateUtil() {
 
-  }
-
-  public static LocalDate getBirthDate(String nationalId) {
-    String yearPrefix = null;
-
-    if (nationalId.startsWith("2")) {
-      yearPrefix = "19";
-    } else {
-      yearPrefix = "20";
     }
 
-    String birthdateStr = yearPrefix + nationalId.substring(1, 7);
+    public static LocalDate getBirthDate(String nationalId) {
+        String yearPrefix = null;
 
-    return LocalDate.parse(birthdateStr, formatter);
+        if (nationalId.startsWith("2")) {
+            yearPrefix = "19";
+        } else {
+            yearPrefix = "20";
+        }
 
-  }
+        String birthdateStr = yearPrefix + nationalId.substring(1, 7);
 
-  public static int calculateAge(LocalDate birthdate) {
-    return (int) YEARS.between(birthdate, LocalDate.now());
-  }
+        return LocalDate.parse(birthdateStr, formatter);
+
+    }
+
+    public static int calculateAge(LocalDate birthdate) {
+        return (int) YEARS.between(birthdate, LocalDate.now());
+    }
 }

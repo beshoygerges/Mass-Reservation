@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = {"/admin"})
 public class DashboardController {
 
-  private final AdminService adminService;
+    private final AdminService adminService;
 
-  @GetMapping({"", "/dashboard"})
-  public String dashboard(Model model) {
-    model.addAttribute("statistics", adminService.getStatistics());
-    return "admin/dashboard";
-  }
+    @GetMapping({"", "/dashboard"})
+    public String dashboard(Model model) {
+        model.addAttribute("statistics", adminService.getStatistics());
+        return "admin/dashboard";
+    }
 }
