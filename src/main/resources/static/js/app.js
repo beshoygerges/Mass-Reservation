@@ -31,14 +31,21 @@ function getMassesByDate(date, times) {
     timeout: 600000,
     success: function (data) {
       var masses = JSON.parse(JSON.stringify(data));
-      console.log(masses)
       $('#' + times + '').prop('disabled', false);
+      var exist=false;
       for (i = 0; i < masses.length; i++) {
         if (masses[i].enabled) {
+          exist=true;
           $('#' + times + '').append(
-              `<option value="` + masses[i].time + `">` + masses[i].time.substring(0, 5)
+              `<option value="` + masses[i].time + `">`
+              + masses[i].time.substring(0, 5)
               + `</option>`);
         }
+      }
+      if (!exist){
+        $('#' + times + '').prop('disabled', true);
+        $('#' + times + '').append(
+            `<option value="" disabled selected hidden>لا توجد قداسات لهذا اليوم</option>`);
       }
     },
     error: function (e) {
@@ -323,12 +330,25 @@ $('#myModal').on('hidden.bs.modal', function () {
   resetTimes('reservationTimes');
 });
 
+$('#myModal').on('shown.bs.modal', function () {
+
+  var date = $("#reservationDate").val();
+  date = new Date(date);
+  getMassesByDate(date, 'reservationTimes');
+});
+
 $('#myModal2').on('hidden.bs.modal', function () {
   $("#cancelReserveBtn").prop("disabled", false);
   $("#cancelResponse").text('');
   $('#cancelReservationForm').trigger("reset");
   cancelDate.value = currentDate.toISOString().split("T")[0];
   resetTimes('cancelTimes');
+});
+
+$('#myModal2').on('shown.bs.modal', function () {
+  var date = $("#cancelDate").val();
+  date = new Date(date);
+  getMassesByDate(date, 'cancelTimes');
 });
 
 $('#myModal3').on('hidden.bs.modal', function () {
@@ -339,6 +359,12 @@ $('#myModal3').on('hidden.bs.modal', function () {
   resetTimes('searchTimes');
 });
 
+$('#myModal3').on('shown.bs.modal', function () {
+  var date = $("#searchDate").val();
+  date = new Date(date);
+  getMassesByDate(date, 'searchTimes');
+});
+
 $('#myModal4').on('hidden.bs.modal', function () {
   $("#seatsBtn").prop("disabled", false);
   $("#seatsResponse").text('');
@@ -347,16 +373,10 @@ $('#myModal4').on('hidden.bs.modal', function () {
   resetTimes('seatsTimes');
 });
 
-$('#myModal5').on('hidden.bs.modal', function () {
-  $("#eveningReserveBtn").prop("disabled", false);
-  $("#eveningResponse").text('');
-  $('#eveningReservationForm').trigger("reset");
-});
-
-$('#myModal6').on('hidden.bs.modal', function () {
-  $("#eveningCancelReserveBtn").prop("disabled", false);
-  $("#eveningCancelResponse").text('');
-  $('#eveningCancelReservationForm').trigger("reset");
+$('#myModal4').on('shown.bs.modal', function () {
+  var date = $("#seatsDate").val();
+  date = new Date(date);
+  getMassesByDate(date, 'seatsTimes');
 });
 
 $('#addUserModal').on('hidden.bs.modal', function () {
