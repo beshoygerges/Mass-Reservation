@@ -37,7 +37,7 @@ public class Mass implements Serializable {
     private LocalTime time;
 
     @Column(nullable = false, columnDefinition = "int default 100")
-    private int totalSeats = 100;
+    private int totalSeats = 130;
 
     @Column(nullable = false, columnDefinition = "int default 0")
     private int reservedSeats = 0;
@@ -46,7 +46,7 @@ public class Mass implements Serializable {
     private boolean enabled = true;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean yonan = true;
+    private boolean yonan = false;
 
     @Column(nullable = false)
     @CreationTimestamp
