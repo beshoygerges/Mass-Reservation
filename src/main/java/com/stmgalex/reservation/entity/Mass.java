@@ -48,6 +48,7 @@ public class Mass implements Serializable {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean yonan = false;
 
+    @Column(nullable = false, columnDefinition = "int default 0")
     private short feastWeek;
 
     @Column(nullable = false)
