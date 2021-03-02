@@ -40,7 +40,7 @@ public class MassController {
         @RequestParam(defaultValue = "20") int size,
         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
-        Sort sort = Sort.by("id").ascending();
+        Sort sort = Sort.by("date").ascending();
 
         PageRequest pageRequest = PageRequest.of(page, size, sort);
 
