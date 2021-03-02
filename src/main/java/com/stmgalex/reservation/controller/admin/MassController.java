@@ -49,7 +49,7 @@ public class MassController {
         model.addAttribute("masses", massPage.getContent()
             .stream()
             .map(m -> MapperUtil.map(m, MassDto.class))
-            .sorted(Comparator.comparing(MassDto::getId))
+            .sorted(Comparator.comparing(MassDto::getDate))
             .collect(Collectors.toList()));
 
         model.addAttribute("page", massPage);
