@@ -71,7 +71,19 @@ public class MassServiceImpl implements MassService {
                 throw new RuntimeException("عفوا لقد قمت بحجز قداس في هذا اليوم من قبل");
             });
 
-        if (!mass.isYonan() && !mass.getDate().equals(LocalDate.of(2021, 02, 18))) {
+        if (mass.isYonan()) {
+            long count = user.getMassReservations()
+                .stream()
+                .filter(massReservation -> massReservation.isActive() && massReservation.getMass()
+                    .isYonan() && massReservation.getMass().getFeastWeek() == mass.getFeastWeek())
+                .count();
+
+            if (count + 1 > 2) {
+                throw new RuntimeException(
+                    "عفوا مسموح فقط بقداسان اسبوعيا خلال فترة الصيام");
+            }
+
+        } else {
             user.getMassReservations()
                 .stream()
                 .filter(

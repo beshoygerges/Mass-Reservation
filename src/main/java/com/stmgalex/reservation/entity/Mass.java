@@ -48,6 +48,8 @@ public class Mass implements Serializable {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean yonan = false;
 
+    private short feastWeek;
+
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
