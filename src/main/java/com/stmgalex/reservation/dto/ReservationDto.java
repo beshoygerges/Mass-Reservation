@@ -16,4 +16,8 @@ public class ReservationDto implements Serializable {
     private UserDto user;
 
     private boolean active;
+
+    private int seatNumber;
+
+    private String place;
 }

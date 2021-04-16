@@ -19,6 +19,7 @@ import com.stmgalex.reservation.repository.MassRepository;
 import com.stmgalex.reservation.repository.MassReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
 import com.stmgalex.reservation.service.MassService;
+import com.stmgalex.reservation.util.RangeUtil;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -80,7 +81,7 @@ public class MassServiceImpl implements MassService {
 
             if (count + 1 > 2) {
                 throw new RuntimeException(
-                    "عفوا مسموح فقط بقداسان اسبوعيا خلال فترة الصيام");
+                    "عفوا مسموح فقط بحضور بصختان مسائيتان فقط خلال اسبوع الالام");
             }
 
         } else {
@@ -88,7 +89,8 @@ public class MassServiceImpl implements MassService {
                 .stream()
                 .filter(
                     massReservation -> massReservation.isActive() && !massReservation.getMass()
-                        .isYonan())
+                        .isYonan()
+                        && !massReservation.getMass().getDate().equals(LocalDate.of(2021, 4, 23)))
                 .sorted(MassServiceImpl::compareByMassDate)
                 .map(MassReservation::getMass)
                 .filter(lastMass -> !isValidPeriod(mass, lastMass))
@@ -104,6 +106,8 @@ public class MassServiceImpl implements MassService {
         MassReservation massReservation = new MassReservation(user, mass);
 
         massReservation.setSeatNumber(mass.getReservedSeats());
+
+        massReservation.setPlace(RangeUtil.getRangePlace(massReservation.getSeatNumber()));
 
         massReservation = massReservationRepository.save(massReservation);
 

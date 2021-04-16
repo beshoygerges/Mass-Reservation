@@ -37,6 +37,8 @@ public class MassReservation implements Serializable {
     @Column(nullable = false, columnDefinition = "int default 0")
     private int seatNumber;
 
+    private String place;
+
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean active = true;
 

@@ -1,7 +1,5 @@
 package com.stmgalex.reservation.dto;
 
-import com.stmgalex.reservation.entity.Evening;
-import com.stmgalex.reservation.entity.EveningReservation;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.entity.User;
@@ -19,11 +17,11 @@ public class ReservationResponse implements Serializable {
 
     private int seatNumber;
 
-    private LocalDate eveningDate;
-
     private LocalDate massDate;
 
     private LocalTime massTime;
+
+    private String place;
 
     public ReservationResponse(MassReservation massReservation) {
         User user = massReservation.getUser();
@@ -33,13 +31,7 @@ public class ReservationResponse implements Serializable {
         setName(user.getName());
         setReservationId(massReservation.getId());
         setSeatNumber(massReservation.getSeatNumber());
+        setPlace(massReservation.getPlace());
     }
 
-    public ReservationResponse(EveningReservation eveningReservation) {
-        User user = eveningReservation.getUser();
-        Evening evening = eveningReservation.getEvening();
-        setEveningDate(evening.getDate());
-        setName(user.getName());
-        setReservationId(eveningReservation.getId());
-    }
 }
