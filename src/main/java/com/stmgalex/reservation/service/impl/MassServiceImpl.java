@@ -86,20 +86,24 @@ public class MassServiceImpl implements MassService {
             }
 
         } else {
-            user.getMassReservations()
-                .stream()
-                .filter(
-                    massReservation -> massReservation.isActive() && !massReservation.getMass()
-                        .isYonan()
-                        && !massReservation.getMass().getDate().equals(LocalDate.of(2021, 4, 23)))
-                .sorted(MassServiceImpl::compareByMassDate)
-                .map(MassReservation::getMass)
-                .filter(lastMass -> !isValidPeriod(mass, lastMass))
-                .findFirst()
-                .ifPresent(lastMass -> {
-                    throw new RuntimeException(
-                        "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 10 ايام");
-                });
+
+            if (!mass.getDate().equals(LocalDate.of(2021, 4, 23))) {
+                user.getMassReservations()
+                    .stream()
+                    .filter(
+                        massReservation -> massReservation.isActive() && !massReservation.getMass()
+                            .isYonan()
+                            && !massReservation.getMass().getDate()
+                            .equals(LocalDate.of(2021, 4, 23)))
+                    .sorted(MassServiceImpl::compareByMassDate)
+                    .map(MassReservation::getMass)
+                    .filter(lastMass -> !isValidPeriod(mass, lastMass))
+                    .findFirst()
+                    .ifPresent(lastMass -> {
+                        throw new RuntimeException(
+                            "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 10 ايام");
+                    });
+            }
         }
 
         mass.reserveSeat();
