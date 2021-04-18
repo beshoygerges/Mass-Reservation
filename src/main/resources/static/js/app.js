@@ -219,8 +219,8 @@ function cancelReservation() {
             $('#successModal').modal('show');
             $('#reservationDetails').html(
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
-                '<strong>رقم الحجز   :   ' + details.reservationId + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
+                '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
                 '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
                 '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
                 '<strong>حالة الحجز  :   تم الإلغاء</strong>'
