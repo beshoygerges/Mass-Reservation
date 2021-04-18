@@ -49,7 +49,7 @@ public class MassServiceImpl implements MassService {
             .orElseThrow(() -> new RuntimeException("من فضلك قم بالتسجيل اولا"));
 
         Optional<Mass> optionalMass = massRepository
-            .findByDateAndTime(request.getMassDate(), request.getMassTime());
+            .findByDateAndTimeAndEnabledIsTrue(request.getMassDate(), request.getMassTime());
 
         Mass mass = optionalMass
             .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
@@ -66,6 +66,7 @@ public class MassServiceImpl implements MassService {
             .stream()
             .filter(massReservation -> massReservation.isActive()
                 && massReservation.getMass().isEnabled()
+                && massReservation.getMass().isYonan()
                 && massReservation.getMass().getDate().equals(mass.getDate()))
             .findFirst()
             .ifPresent(a -> {
@@ -150,7 +151,7 @@ public class MassServiceImpl implements MassService {
     public Mass getAvailableSeats(AvailableSeatsRequest request) {
 
         Optional<Mass> optionalMass = massRepository
-            .findByDateAndTime(request.getMassDate(), request.getMassTime());
+            .findByDateAndTimeAndEnabledIsTrue(request.getMassDate(), request.getMassTime());
 
         Mass mass = optionalMass
             .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));

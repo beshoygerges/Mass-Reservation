@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MassRepository extends JpaRepository<Mass, Integer> {
 
-    Optional<Mass> findByDateAndTime(LocalDate date, LocalTime time);
+    Optional<Mass> findByDateAndTimeAndEnabledIsTrue(LocalDate date, LocalTime time);
 
     @Modifying
     @Query("update Mass m set m.totalSeats = ?1, m.reservedSeats = m.reservedSeats+?2 where m.id = ?3")
