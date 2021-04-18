@@ -66,7 +66,6 @@ public class MassServiceImpl implements MassService {
             .stream()
             .filter(massReservation -> massReservation.isActive()
                 && massReservation.getMass().isEnabled()
-                && massReservation.getMass().isYonan()
                 && massReservation.getMass().getDate().equals(mass.getDate()))
             .findFirst()
             .ifPresent(a -> {
