@@ -40,6 +40,7 @@ public class MassServiceImpl implements MassService {
     @Value("${mass.interval.days}")
     private int reservationPeriod;
 
+    @Transactional
     @Override
     public synchronized ReservationResponse reserve(final MassReservationRequest request) {
 
