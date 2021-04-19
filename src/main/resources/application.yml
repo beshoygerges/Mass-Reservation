@@ -10,7 +10,7 @@ spring:
     test-while-idle: true
     hikari:
       connectionTimeout: 30000
-      maximumPoolSize: 20
+      maximumPoolSize: 12
   jpa:
     hibernate:
       ddl-auto: update
