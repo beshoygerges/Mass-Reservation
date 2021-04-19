@@ -184,8 +184,6 @@ public class AdminServiceImpl implements AdminService {
         createCell(sheet, row, 2, "الرقم القومي", style);
         createCell(sheet, row, 3, "رقم المقعد", style);
         createCell(sheet, row, 4, "المكان", style);
-        createCell(sheet, row, 5, "اليوم", style);
-        createCell(sheet, row, 6, "الساعة", style);
 
     }
 
@@ -238,8 +236,6 @@ public class AdminServiceImpl implements AdminService {
             createCell(sheet, row, columnCount++, massReservation.getUser().getNationalId(), style);
             createCell(sheet, row, columnCount++, massReservation.getSeatNumber(), style);
             createCell(sheet, row, columnCount++, massReservation.getPlace(), style);
-            createCell(sheet, row, columnCount++, massReservation.getMass().getDate(), style);
-            createCell(sheet, row, columnCount++, massReservation.getMass().getTime(), style);
             i++;
         }
     }
