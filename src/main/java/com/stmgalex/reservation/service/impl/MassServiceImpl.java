@@ -2,6 +2,12 @@ package com.stmgalex.reservation.service.impl;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.stmgalex.reservation.dto.AvailableSeatsRequest;
 import com.stmgalex.reservation.dto.CancelReservationRequest;
 import com.stmgalex.reservation.dto.MassReservationRequest;
@@ -20,7 +26,10 @@ import com.stmgalex.reservation.repository.MassReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
 import com.stmgalex.reservation.service.MassService;
 import com.stmgalex.reservation.util.RangeUtil;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -178,6 +187,48 @@ public class MassServiceImpl implements MassService {
             throw new RuntimeException("عفوا لا توجد قداسات في هذا اليوم");
         }
         return masses;
+    }
+
+    @Override
+    public byte[] searchReservationQR(SearchReservationRequest request)
+        throws IOException, WriterException {
+        Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
+        User user = optionalUser
+            .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+        MassReservation massReservation = user
+            .getMassReservation(request.getMassDate(), request.getMassTime());
+        if (Objects.isNull(massReservation)) {
+            throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
+        }
+        ReservationResponse response = new ReservationResponse(massReservation);
+        StringBuilder qr = new StringBuilder("{\n");
+        qr.append("  Name: " + response.getName() + ",\n");
+        qr.append("  National Id: " + massReservation.getUser().getNationalId() + ",\n");
+        qr.append("  Seat Number: " + response.getSeatNumber() + ",\n");
+        qr.append("  Place: " + response.getPlace() + ",\n");
+        qr.append("  Date: " + response.getMassDate().toString() + ",\n");
+        qr.append("  Time: " + response.getMassTime().toString() + ",\n");
+        if (massReservation.getMass().isYonan()) {
+            qr.append("  Reservation Type: بصخة,\n");
+        } else {
+            qr.append("  Reservation Type: قداس,\n");
+        }
+        qr.append("}");
+
+        Hashtable hints = new Hashtable();
+
+        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+
+        BitMatrix bitMatrix = qrCodeWriter
+            .encode(qr.toString(), BarcodeFormat.QR_CODE, 300,
+                300, hints);
+
+        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+        return pngOutputStream.toByteArray();
     }
 
     private static int compareByMassDate(MassReservation e1, MassReservation e2) {

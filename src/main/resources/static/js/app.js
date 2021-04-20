@@ -247,30 +247,22 @@ function searchReservation() {
     request["massTime"] = $("#searchTimes").val();
     request["massDate"] = $("#searchDate").val();
 
-    var nationalId = $("#searchNationalId").val();
-
     $("#searchReserveBtn").prop("disabled", true);
 
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/reservations/masses/search",
+        url: "/reservations/masses/search/qr",
         data: JSON.stringify(request),
-        dataType: 'json',
         cache: false,
-        timeout: 600000,
+        timeout: 6000000,
         success: function (data) {
-            var details = JSON.parse(JSON.stringify(data));
+            console.log("success")
             $('#myModal3').modal('toggle');
             $('#successModal').modal('show');
             $('#reservationDetails').html(
-                '<strong>الاسم        :   ' + details.name + '</strong><br>' +
-                '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
-                '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
-                '<strong>التاريخ:   ' + details.massDate + '</strong><br>' +
-                '<strong>الوقت:   ' + details.massTime + '</strong><br>' +
-                '<strong>حالة الحجز  :   تم التأكيد</strong>'
-            )
+                '<img id="qrImage" src="data:image/png;base64,' + data + '" style="display: block; margin-left: auto; margin-right: auto;"/>'
+            );
         },
         error: function (e) {
             var res = JSON.parse(e.responseText)

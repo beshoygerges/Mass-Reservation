@@ -1,5 +1,6 @@
 package com.stmgalex.reservation.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.entity.User;
@@ -17,8 +18,10 @@ public class ReservationResponse implements Serializable {
 
     private int seatNumber;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate massDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
     private LocalTime massTime;
 
     private String place;
