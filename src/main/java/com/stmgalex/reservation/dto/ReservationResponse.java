@@ -26,6 +26,8 @@ public class ReservationResponse implements Serializable {
 
     private String place;
 
+    private String qr;
+
     public ReservationResponse(MassReservation massReservation) {
         User user = massReservation.getUser();
         Mass mass = massReservation.getMass();

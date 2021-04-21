@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface MassService {
 
-    ReservationResponse reserve(MassReservationRequest request);
+    ReservationResponse reserve(MassReservationRequest request) throws IOException, WriterException;
 
     ReservationResponse cancelReservation(CancelReservationRequest request);
 
@@ -23,5 +23,5 @@ public interface MassService {
 
     List<Mass> getMassesWithDate(LocalDate localDate);
 
-    byte[] searchReservationQR(SearchReservationRequest request) throws IOException, WriterException;
+    ReservationResponse searchReservationQR(SearchReservationRequest request) throws IOException, WriterException;
 }

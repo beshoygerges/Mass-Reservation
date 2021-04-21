@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,8 @@ public class MassServiceImpl implements MassService {
 
     @Transactional
     @Override
-    public synchronized ReservationResponse reserve(final MassReservationRequest request) {
+    public synchronized ReservationResponse reserve(final MassReservationRequest request)
+        throws IOException, WriterException {
 
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
@@ -126,7 +128,7 @@ public class MassServiceImpl implements MassService {
 
         massReservation = massReservationRepository.save(massReservation);
 
-        return new ReservationResponse(massReservation);
+        return generateQRReservationResponse(massReservation);
     }
 
     @Transactional
@@ -190,7 +192,7 @@ public class MassServiceImpl implements MassService {
     }
 
     @Override
-    public byte[] searchReservationQR(SearchReservationRequest request)
+    public ReservationResponse searchReservationQR(SearchReservationRequest request)
         throws IOException, WriterException {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser
@@ -200,6 +202,11 @@ public class MassServiceImpl implements MassService {
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
+        return generateQRReservationResponse(massReservation);
+    }
+
+    private ReservationResponse generateQRReservationResponse(MassReservation massReservation)
+        throws WriterException, IOException {
         ReservationResponse response = new ReservationResponse(massReservation);
         StringBuilder qr = new StringBuilder("{\n");
         qr.append("  Name: " + response.getName() + ",\n");
@@ -228,7 +235,13 @@ public class MassServiceImpl implements MassService {
         ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
 
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
-        return pngOutputStream.toByteArray();
+
+        String qrString = new String(Base64.encodeBase64(pngOutputStream.toByteArray()),
+            "UTF-8");
+
+        response.setQr(qrString);
+
+        return response;
     }
 
     private static int compareByMassDate(MassReservation e1, MassReservation e2) {

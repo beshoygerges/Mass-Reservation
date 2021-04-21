@@ -174,12 +174,14 @@ function reserveMass() {
             $('#successModal').modal('show');
             $('#header').html('بيانات الحجز');
             $('#reservationDetails').html(
+                '<img id="qrImage" src="data:image/png;base64,' + data.qr + '" style="display: block; margin-left: auto; margin-right: auto;"/>' +
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
-                '<strong>التاريخ:   ' + details.massDate + '</strong><br>' +
-                '<strong>الوقت:   ' + details.massTime + '</strong><br>' +
-                '<strong>حالة الحجز  :   تم التاكيد</strong>'
+                '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
+                '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
+                '<br><br>' +
+                '<strong>برجاء الاحتفاظ بهذا الكود على هاتفك الخاص</strong><br>'
             )
         },
         error: function (e) {
@@ -254,14 +256,22 @@ function searchReservation() {
         contentType: "application/json",
         url: "/reservations/masses/search/qr",
         data: JSON.stringify(request),
+        dataType: 'json',
         cache: false,
         timeout: 6000000,
         success: function (data) {
-            console.log("success")
+            var details = JSON.parse(JSON.stringify(data));
             $('#myModal3').modal('toggle');
             $('#successModal').modal('show');
             $('#reservationDetails').html(
-                '<img id="qrImage" src="data:image/png;base64,' + data + '" style="display: block; margin-left: auto; margin-right: auto;"/>'
+                '<img id="qrImage" src="data:image/png;base64,' + data.qr + '" style="display: block; margin-left: auto; margin-right: auto;"/>' +
+                '<strong>الاسم        :   ' + details.name + '</strong><br>' +
+                '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
+                '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
+                '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
+                '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
+                '<br><br>' +
+                '<strong>برجاء الاحتفاظ بهذا الكود على هاتفك الخاص</strong><br>'
             );
         },
         error: function (e) {

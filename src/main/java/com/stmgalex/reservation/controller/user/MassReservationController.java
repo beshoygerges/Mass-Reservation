@@ -5,6 +5,7 @@ import com.stmgalex.reservation.dto.AvailableSeatsRequest;
 import com.stmgalex.reservation.dto.CancelReservationRequest;
 import com.stmgalex.reservation.dto.MassDto;
 import com.stmgalex.reservation.dto.MassReservationRequest;
+import com.stmgalex.reservation.dto.ReservationResponse;
 import com.stmgalex.reservation.dto.SearchReservationRequest;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.service.MassService;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,8 @@ public class MassReservationController {
     private static final String QR_CODE_IMAGE_PATH = "./src/main/resources/QRCode.png";
 
     @PostMapping
-    public ResponseEntity addReservation(@Valid @RequestBody MassReservationRequest request) {
+    public ResponseEntity addReservation(@Valid @RequestBody MassReservationRequest request)
+        throws IOException, WriterException {
         return ResponseEntity.ok(massService.reserve(request));
     }
 
@@ -48,13 +49,13 @@ public class MassReservationController {
     }
 
     @PostMapping("/search/qr")
-    public ResponseEntity<String> getReservationQR(
+    public ResponseEntity<ReservationResponse> getReservationQR(
         @Valid @RequestBody SearchReservationRequest request)
         throws IOException, WriterException {
-        String encodedfile = new String(
-            Base64.encodeBase64(massService.searchReservationQR(request)), "UTF-8");
-        return ResponseEntity.status(HttpStatus.OK)
-            .body(encodedfile);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(massService.searchReservationQR(request));
     }
 
     @PostMapping("/delete")
