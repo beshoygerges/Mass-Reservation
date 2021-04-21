@@ -180,7 +180,7 @@ function reserveMass() {
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
                 '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
                 '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
-                '<br><br>' +
+                '<br>' +
                 '<strong>برجاء الاحتفاظ بهذا الكود على هاتفك الخاص</strong><br>'
             )
         },
@@ -270,7 +270,7 @@ function searchReservation() {
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
                 '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
                 '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
-                '<br><br>' +
+                '<br>' +
                 '<strong>برجاء الاحتفاظ بهذا الكود على هاتفك الخاص</strong><br>'
             );
         },
