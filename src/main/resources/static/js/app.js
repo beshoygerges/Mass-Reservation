@@ -1,5 +1,5 @@
 currentDate = new Date();
-currentDate.setDate(currentDate.getDate() + 1);
+currentDate.setDate(currentDate.getDate());
 
 reservationDate.min = currentDate.toISOString().split("T")[0];
 
