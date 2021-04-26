@@ -163,6 +163,7 @@ public class MassServiceImpl implements MassService {
         return new ReservationResponse(massReservation);
     }
 
+    @Transactional
     @Override
     public Mass getAvailableSeats(AvailableSeatsRequest request) {
 

@@ -178,8 +178,8 @@ function reserveMass() {
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
-                '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
-                '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
+                '<strong>التاريخ :   ' + details.massDate + '</strong><br>' +
+                '<strong>الوقت  :   ' + details.massTime + '</strong><br>' +
                 '<br>' +
                 '<strong>برجاء الاحتفاظ بهذا الكود على هاتفك الخاص</strong><br>'
             )
@@ -223,8 +223,8 @@ function cancelReservation() {
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
-                '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
-                '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
+                '<strong>التاريخ :   ' + details.massDate + '</strong><br>' +
+                '<strong>الوقت  :   ' + details.massTime + '</strong><br>' +
                 '<strong>حالة الحجز  :   تم الإلغاء</strong>'
             )
 
@@ -268,8 +268,8 @@ function searchReservation() {
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
-                '<strong>تاريخ القداس:   ' + details.massDate + '</strong><br>' +
-                '<strong>وقت القداس  :   ' + details.massTime + '</strong><br>' +
+                '<strong>التاريخ :   ' + details.massDate + '</strong><br>' +
+                '<strong>الوقت  :   ' + details.massTime + '</strong><br>' +
                 '<br>' +
                 '<strong>برجاء الاحتفاظ بهذا الكود على هاتفك الخاص</strong><br>'
             );
