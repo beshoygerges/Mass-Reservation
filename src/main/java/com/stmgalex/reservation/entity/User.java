@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -95,8 +94,7 @@ public class User implements Serializable {
         return massReservations.stream()
             .filter(r -> r.isActive() &&
                 r.getMass().getDate().equals(massDate) &&
-                r.getMass().getTime().equals(massTime) &&
-                r.getMass().getDate().isAfter(LocalDate.now()))
+                r.getMass().getTime().equals(massTime))
             .findFirst()
             .orElse(null);
     }
