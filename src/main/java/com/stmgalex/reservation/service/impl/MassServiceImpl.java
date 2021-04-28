@@ -153,13 +153,17 @@ public class MassServiceImpl implements MassService {
     @Override
     public ReservationResponse searchReservation(final SearchReservationRequest request) {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
+
         User user = optionalUser
             .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+
         MassReservation massReservation = user
             .getMassReservation(request.getMassDate(), request.getMassTime());
+
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
+
         return new ReservationResponse(massReservation);
     }
 
