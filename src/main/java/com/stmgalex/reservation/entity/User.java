@@ -66,17 +66,11 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MassReservation> massReservations = new ArrayList<>();
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @OrderBy("id desc")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EveningReservation> eveningReservations = new ArrayList<>();
-
 
     @Transient
     public MassReservation getLastActiveMassReservation() {
         return massReservations.stream()
-            .filter(mr -> mr.isActive() && !mr.getMass().isYonan())
+            .filter(mr -> mr.isActive())
             .findFirst()
             .orElse(null);
     }
@@ -84,7 +78,7 @@ public class User implements Serializable {
     @Transient
     public MassReservation getLastYonanMassReservation() {
         return massReservations.stream()
-            .filter(mr -> mr.isActive() && mr.getMass().isYonan())
+            .filter(mr -> mr.isActive())
             .findFirst()
             .orElse(null);
     }

@@ -8,6 +8,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.stmgalex.reservation.constants.Gender;
 import com.stmgalex.reservation.dto.AvailableSeatsRequest;
 import com.stmgalex.reservation.dto.CancelReservationRequest;
 import com.stmgalex.reservation.dto.MassReservationRequest;
@@ -70,55 +71,36 @@ public class MassServiceImpl implements MassService {
             throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
         }
 
-        if (!mass.haveSeats()) {
-            throw new NoAvailableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للقداس");
+        if (!mass.haveSeats(user.getGender())) {
+            if (user.getGender() == Gender.MALE) {
+                throw new NoAvailableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للرجال");
+            }
+            throw new NoAvailableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للسيدات");
         }
 
         user.getMassReservations()
             .stream()
             .filter(massReservation -> massReservation.isActive()
                 && massReservation.getMass().isEnabled()
-                && massReservation.getMass().isYonan() == mass.isYonan()
                 && massReservation.getMass().getDate().equals(mass.getDate()))
             .findFirst()
             .ifPresent(a -> {
                 throw new RuntimeException("عفوا لقد قمت بحجز قداس في هذا اليوم من قبل");
             });
 
-        if (mass.isYonan()) {
-            long count = user.getMassReservations()
-                .stream()
-                .filter(massReservation -> massReservation.isActive() && massReservation.getMass()
-                    .isYonan() && massReservation.getMass().getFeastWeek() == mass.getFeastWeek())
-                .count();
-
-            if (count + 1 > 2) {
+        user.getMassReservations()
+            .stream()
+            .filter(massReservation -> massReservation.isActive())
+            .sorted(MassServiceImpl::compareByMassDate)
+            .map(MassReservation::getMass)
+            .filter(lastMass -> !isValidPeriod(mass, lastMass))
+            .findFirst()
+            .ifPresent(lastMass -> {
                 throw new RuntimeException(
-                    "عفوا مسموح فقط بحضور بصختان مسائيتان فقط خلال اسبوع الالام");
-            }
+                    "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 15 يوم");
+            });
 
-        } else {
-
-            if (!mass.getDate().equals(LocalDate.of(2021, 4, 23))) {
-                user.getMassReservations()
-                    .stream()
-                    .filter(
-                        massReservation -> massReservation.isActive() && !massReservation.getMass()
-                            .isYonan()
-                            && !massReservation.getMass().getDate()
-                            .equals(LocalDate.of(2021, 4, 23)))
-                    .sorted(MassServiceImpl::compareByMassDate)
-                    .map(MassReservation::getMass)
-                    .filter(lastMass -> !isValidPeriod(mass, lastMass))
-                    .findFirst()
-                    .ifPresent(lastMass -> {
-                        throw new RuntimeException(
-                            "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 10 ايام");
-                    });
-            }
-        }
-
-        mass.reserveSeat();
+        mass.reserveSeat(user.getGender());
 
         MassReservation massReservation = new MassReservation(user, mass);
 
@@ -146,7 +128,7 @@ public class MassServiceImpl implements MassService {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
         massReservation.setActive(false);
-        massReservation.getMass().releaseSeat();
+        massReservation.getMass().releaseSeat(user.getGender());
         return new ReservationResponse(massReservation);
     }
 
@@ -220,11 +202,6 @@ public class MassServiceImpl implements MassService {
         qr.append("  Place: " + response.getPlace() + ",\n");
         qr.append("  Date: " + response.getMassDate().toString() + ",\n");
         qr.append("  Time: " + response.getMassTime().toString() + ",\n");
-        if (massReservation.getMass().isYonan()) {
-            qr.append("  Reservation Type: بصخة,\n");
-        } else {
-            qr.append("  Reservation Type: قداس,\n");
-        }
         qr.append("}");
 
         Hashtable hints = new Hashtable();

@@ -1,6 +1,5 @@
 package com.stmgalex.reservation.dto;
 
-import com.stmgalex.reservation.entity.Evening;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -10,8 +9,6 @@ public class ReservationDto implements Serializable {
     private Integer id;
 
     private MassDto mass;
-
-    private Evening evening;
 
     private UserDto user;
 
