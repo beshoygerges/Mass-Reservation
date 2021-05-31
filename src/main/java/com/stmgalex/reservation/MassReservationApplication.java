@@ -91,6 +91,18 @@ public class MassReservationApplication implements CommandLineRunner {
 
         mass = new Mass();
 
+        mass.setDate(LocalDate.of(2021, 6, 10));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
         mass.setDate(LocalDate.of(2021, 6, 11));
         mass.setTime(LocalTime.of(8, 0, 0));
         mass.setTotalSeats(50);
