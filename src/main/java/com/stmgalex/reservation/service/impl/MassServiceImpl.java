@@ -226,8 +226,8 @@ public class MassServiceImpl implements MassService {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
         BitMatrix bitMatrix = qrCodeWriter
-            .encode(qr.toString(), BarcodeFormat.QR_CODE, 300,
-                300, hints);
+            .encode(qr.toString(), BarcodeFormat.QR_CODE, 250,
+                250, hints);
 
         ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
 
