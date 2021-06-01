@@ -30,6 +30,8 @@ import com.stmgalex.reservation.util.RangeUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
@@ -100,6 +102,11 @@ public class MassServiceImpl implements MassService {
                     "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 15 يوم");
             });
 
+        if (ChronoUnit.HOURS
+            .between(LocalDateTime.now(), LocalDateTime.of(mass.getDate(), mass.getTime())) < 12) {
+            throw new RuntimeException("اخر ميعاد للحجز قبل القداس ب 12 ساعة");
+        }
+
         mass.reserveSeat(user.getGender());
 
         MassReservation massReservation = new MassReservation(user, mass);
@@ -127,6 +134,14 @@ public class MassServiceImpl implements MassService {
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
+
+        Mass mass = massReservation.getMass();
+
+        if (ChronoUnit.HOURS
+            .between(LocalDateTime.now(), LocalDateTime.of(mass.getDate(), mass.getTime())) < 12) {
+            throw new RuntimeException("اخر ميعاد لالغاء الحجز قبل القداس ب 12 ساعة");
+        }
+
         massReservation.setActive(false);
         massReservation.getMass().releaseSeat(user.getGender());
         return new ReservationResponse(massReservation);

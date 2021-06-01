@@ -27,6 +27,6 @@ spring:
 
 mass:
   interval:
-    days: 10
+    days: 15
 
 
