@@ -174,7 +174,7 @@ function reserveMass() {
             $('#successModal').modal('show');
             $('#header').html('بيانات الحجز');
             $('#reservationDetails').html(
-                '<img id="qrImage" src="data:image/png;base64,' + data.qr + '" style="display: block; margin-left: auto; margin-right: auto;"/>' +
+                // '<img id="qrImage" src="data:image/png;base64,' + data.qr + '" style="display: block; margin-left: auto; margin-right: auto;"/>' +
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +
@@ -264,7 +264,7 @@ function searchReservation() {
             $('#myModal3').modal('toggle');
             $('#successModal').modal('show');
             $('#reservationDetails').html(
-                '<img id="qrImage" src="data:image/png;base64,' + data.qr + '" style="display: block; margin-left: auto; margin-right: auto;"/>' +
+                // '<img id="qrImage" src="data:image/png;base64,' + data.qr + '" style="display: block; margin-left: auto; margin-right: auto;"/>' +
                 '<strong>الاسم        :   ' + details.name + '</strong><br>' +
                 '<strong>رقم المقعد   :   ' + details.seatNumber + '</strong><br>' +
                 '<strong>مكان المقعد   :   ' + details.place + '</strong><br>' +

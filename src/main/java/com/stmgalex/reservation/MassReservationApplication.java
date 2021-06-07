@@ -27,187 +27,177 @@ public class MassReservationApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        List<Mass> masses = new ArrayList<>();
-//
-//        Mass mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 1));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 2));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 4));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 6));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 9));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 10));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 11));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 13));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 16));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 18));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 20));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 23));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 25));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 27));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        ///////////////////
-//
-//        mass = new Mass();
-//
-//        mass.setDate(LocalDate.of(2021, 6, 30));
-//        mass.setTime(LocalTime.of(8, 0, 0));
-//        mass.setTotalSeats(50);
-//        mass.setMenSeats(20);
-//        mass.setWomenSeats(30);
-//
-//        masses.add(mass);
-//
-//        massRepository.saveAll(masses);
+        List<Mass> masses = new ArrayList<>();
+
+        Mass mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 2));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 4));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 7));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 9));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 11));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 12));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 14));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 16));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 18));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 21));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 23));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 25));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 28));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        mass = new Mass();
+
+        mass.setDate(LocalDate.of(2021, 7, 30));
+        mass.setTime(LocalTime.of(8, 0, 0));
+        mass.setTotalSeats(50);
+        mass.setMenSeats(20);
+        mass.setWomenSeats(30);
+
+        masses.add(mass);
+
+        ///////////////////
+
+        massRepository.saveAll(masses);
 
     }
 }
