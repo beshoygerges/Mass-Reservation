@@ -99,7 +99,7 @@ public class MassServiceImpl implements MassService {
             .findFirst()
             .ifPresent(lastMass -> {
                 throw new RuntimeException(
-                    "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 15 يوم");
+                    "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 14 يوم");
             });
 
         if (ChronoUnit.HOURS
