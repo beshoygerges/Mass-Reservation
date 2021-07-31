@@ -1,7 +1,5 @@
 package com.stmgalex.reservation.service.impl;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -9,24 +7,22 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.stmgalex.reservation.constants.Gender;
-import com.stmgalex.reservation.dto.AvailableSeatsRequest;
-import com.stmgalex.reservation.dto.CancelReservationRequest;
-import com.stmgalex.reservation.dto.MassReservationRequest;
-import com.stmgalex.reservation.dto.ReservationResponse;
-import com.stmgalex.reservation.dto.SearchReservationRequest;
+import com.stmgalex.reservation.dto.*;
 import com.stmgalex.reservation.entity.Mass;
 import com.stmgalex.reservation.entity.MassReservation;
 import com.stmgalex.reservation.entity.User;
-import com.stmgalex.reservation.exception.EntityNotFoundException;
-import com.stmgalex.reservation.exception.NoActiveReservationsException;
-import com.stmgalex.reservation.exception.NoAvailableSeatsException;
-import com.stmgalex.reservation.exception.ReservationNotEnabledException;
-import com.stmgalex.reservation.exception.UserNotFoundException;
+import com.stmgalex.reservation.exception.*;
 import com.stmgalex.reservation.repository.MassRepository;
 import com.stmgalex.reservation.repository.MassReservationRepository;
 import com.stmgalex.reservation.repository.UserRepository;
 import com.stmgalex.reservation.service.MassService;
 import com.stmgalex.reservation.util.RangeUtil;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -36,11 +32,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @RequiredArgsConstructor
 @Service
@@ -56,21 +49,21 @@ public class MassServiceImpl implements MassService {
     @Transactional
     @Override
     public synchronized ReservationResponse reserve(final MassReservationRequest request)
-        throws IOException, WriterException {
+            throws IOException, WriterException {
 
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
         User user = optionalUser
-            .orElseThrow(() -> new RuntimeException("من فضلك قم بالتسجيل اولا"));
+                .orElseThrow(() -> new RuntimeException("من فضلك قم بالتسجيل اولا"));
 
         Optional<Mass> optionalMass = massRepository
-            .findByDateAndTimeAndEnabledIsTrue(request.getMassDate(), request.getMassTime());
+                .findByDateAndTimeAndEnabledIsTrue(request.getMassDate(), request.getMassTime());
 
         Mass mass = optionalMass
-            .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
+                .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد مناسبات في هذا التوقيت"));
 
         if (!mass.isEnabled()) {
-            throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
+            throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذه المناسبة");
         }
 
         if (!mass.haveSeats(user.getGender())) {
@@ -80,31 +73,37 @@ public class MassServiceImpl implements MassService {
             throw new NoAvailableSeatsException("عفوا لقد تم حجز جميع المقاعد المخصصة للسيدات");
         }
 
-        user.getMassReservations()
-            .stream()
-            .filter(massReservation -> massReservation.isActive()
-                && massReservation.getMass().isEnabled()
-                && massReservation.getMass().getDate().equals(mass.getDate()))
-            .findFirst()
-            .ifPresent(a -> {
-                throw new RuntimeException("عفوا لقد قمت بحجز قداس في هذا اليوم من قبل");
-            });
-
-        user.getMassReservations()
-            .stream()
-            .filter(massReservation -> massReservation.isActive())
-            .sorted(MassServiceImpl::compareByMassDate)
-            .map(MassReservation::getMass)
-            .filter(lastMass -> !isValidPeriod(mass, lastMass))
-            .findFirst()
-            .ifPresent(lastMass -> {
-                throw new RuntimeException(
-                    "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 14 يوم");
-            });
-
         if (ChronoUnit.HOURS
-            .between(LocalDateTime.now(), LocalDateTime.of(mass.getDate(), mass.getTime())) < 12) {
-            throw new RuntimeException("اخر ميعاد للحجز قبل القداس ب 12 ساعة");
+                .between(LocalDateTime.now(), LocalDateTime.of(mass.getDate(), mass.getTime())) < 12) {
+            throw new RuntimeException("اخر ميعاد للحجز قبل المناسبة ب 12 ساعة");
+        }
+
+        if (mass.isSpecialEvent()) {
+            user.getMassReservations()
+                    .stream()
+                    .filter(massReservation -> massReservation.isActive() && massReservation.getMass().isSpecialEvent())
+                    .sorted(MassServiceImpl::compareByMassDate)
+                    .map(MassReservation::getMass)
+                    .filter(lastMass -> !isValidPeriod(mass, lastMass))
+                    .findFirst()
+                    .ifPresent(lastMass -> {
+                        throw new RuntimeException(
+                                "عفوا يجب ان تكون الفترة بين كل نهضة والاخري مدة لا تقل عن يومان");
+                    });
+        } else {
+
+            user.getMassReservations()
+                    .stream()
+                    .filter(massReservation -> massReservation.isActive() && !massReservation.getMass().isSpecialEvent())
+                    .sorted(MassServiceImpl::compareByMassDate)
+                    .map(MassReservation::getMass)
+                    .filter(lastMass -> !isValidPeriod(mass, lastMass))
+                    .findFirst()
+                    .ifPresent(lastMass -> {
+                        throw new RuntimeException(
+                                "عفوا يجب ان تكون الفترة بين كل قداس والاخر مدة لا تقل عن 14 يوم");
+                    });
+
         }
 
         mass.reserveSeat(user.getGender());
@@ -126,10 +125,10 @@ public class MassServiceImpl implements MassService {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
         User user = optionalUser
-            .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+                .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
 
         MassReservation massReservation = user
-            .getMassReservation(request.getMassDate(), request.getMassTime());
+                .getMassReservation(request.getMassDate(), request.getMassTime());
 
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
@@ -138,7 +137,7 @@ public class MassServiceImpl implements MassService {
         Mass mass = massReservation.getMass();
 
         if (ChronoUnit.HOURS
-            .between(LocalDateTime.now(), LocalDateTime.of(mass.getDate(), mass.getTime())) < 12) {
+                .between(LocalDateTime.now(), LocalDateTime.of(mass.getDate(), mass.getTime())) < 12) {
             throw new RuntimeException("اخر ميعاد لالغاء الحجز قبل القداس ب 12 ساعة");
         }
 
@@ -152,10 +151,10 @@ public class MassServiceImpl implements MassService {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
 
         User user = optionalUser
-            .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+                .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
 
         MassReservation massReservation = user
-            .getMassReservation(request.getMassDate(), request.getMassTime());
+                .getMassReservation(request.getMassDate(), request.getMassTime());
 
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
@@ -169,10 +168,10 @@ public class MassServiceImpl implements MassService {
     public Mass getAvailableSeats(AvailableSeatsRequest request) {
 
         Optional<Mass> optionalMass = massRepository
-            .findByDateAndTimeAndEnabledIsTrue(request.getMassDate(), request.getMassTime());
+                .findByDateAndTimeAndEnabledIsTrue(request.getMassDate(), request.getMassTime());
 
         Mass mass = optionalMass
-            .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
+                .orElseThrow(() -> new EntityNotFoundException("عفوا لا يوجد قداسات في هذا التوقيت"));
 
         if (!mass.isEnabled()) {
             throw new ReservationNotEnabledException("عفوا لقد تم ايقاف الحجز على هذا القداس");
@@ -195,12 +194,12 @@ public class MassServiceImpl implements MassService {
 
     @Override
     public ReservationResponse searchReservationQR(SearchReservationRequest request)
-        throws IOException, WriterException {
+            throws IOException, WriterException {
         Optional<User> optionalUser = userRepository.findByNationalId(request.getNationalId());
         User user = optionalUser
-            .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
+                .orElseThrow(() -> new UserNotFoundException("عفوا هذا المستخدم غير موجود"));
         MassReservation massReservation = user
-            .getMassReservation(request.getMassDate(), request.getMassTime());
+                .getMassReservation(request.getMassDate(), request.getMassTime());
         if (Objects.isNull(massReservation)) {
             throw new NoActiveReservationsException("عفوا لا يوجد حجوزات نشطة لك الان");
         }
@@ -208,7 +207,7 @@ public class MassServiceImpl implements MassService {
     }
 
     private ReservationResponse generateQRReservationResponse(MassReservation massReservation)
-        throws WriterException, IOException {
+            throws WriterException, IOException {
         ReservationResponse response = new ReservationResponse(massReservation);
         StringBuilder qr = new StringBuilder("{\n");
         qr.append("  Name: " + response.getName() + ",\n");
@@ -226,15 +225,15 @@ public class MassServiceImpl implements MassService {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
         BitMatrix bitMatrix = qrCodeWriter
-            .encode(qr.toString(), BarcodeFormat.QR_CODE, 250,
-                250, hints);
+                .encode(qr.toString(), BarcodeFormat.QR_CODE, 250,
+                        250, hints);
 
         ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
 
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
 
         String qrString = new String(Base64.encodeBase64(pngOutputStream.toByteArray()),
-            "UTF-8");
+                "UTF-8");
 
         response.setQr(qrString);
 
@@ -247,6 +246,11 @@ public class MassServiceImpl implements MassService {
 
     private boolean isValidPeriod(Mass mass, Mass lastMass) {
         long days = DAYS.between(mass.getDate(), lastMass.getDate());
+
+        if (mass.isSpecialEvent()) {
+            return days >= 2 || days <= -1 * 2;
+        }
+
         return days >= reservationPeriod || days <= -1 * reservationPeriod;
     }
 
